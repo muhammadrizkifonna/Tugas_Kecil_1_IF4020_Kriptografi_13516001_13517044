@@ -4,24 +4,24 @@ alphabet= "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 alphabetList = list(alphabet)
 
 # text = input("Input text: ")
-text = 'iwzqz jx kl kxvz'
-steckerbrettDictionary = {' ': ' '}
-pairsInSteckerBrett = input("Input the number of pairs in steckerbrett: ")
-for i in range(int(pairsInSteckerBrett)):
-    print("Pair #" + str(i+1))
-    firstSteckerbrettAlphabet = input("Input the first alphabet in pair: ")
-    secondSteckerbrettAlphabet = input("Input the second alphabet in pair: ")
-    steckerbrettDictionary[firstSteckerbrettAlphabet.upper()] = secondSteckerbrettAlphabet.upper()
-print("Input alpha, beta and gamma rotors")
-alphaRotor = int(input("Alpha Rotor = "))
-betaRotor = int(input("Beta Rotor = "))
-gammaRotor = int(input("Gamma Rotor = "))
-for letter in list(steckerbrettDictionary.keys()):
-    if letter in alphabetList:
-        alphabetList.remove(letter)
-        alphabetList.remove(steckerbrettDictionary[letter])
-        steckerbrettDictionary.update({steckerbrettDictionary[letter]:letter})
-reflector = [letter for letter in reversed(alphabetList)]
+# text = 'iwzqz jx kl kxvz'
+# steckerbrettDictionary = {' ': ' '}
+# pairsInSteckerBrett = input("Input the number of pairs in steckerbrett: ")
+# for i in range(int(pairsInSteckerBrett)):
+#     print("Pair #" + str(i+1))
+#     firstSteckerbrettAlphabet = input("Input the first alphabet in pair: ")
+#     secondSteckerbrettAlphabet = input("Input the second alphabet in pair: ")
+#     steckerbrettDictionary[firstSteckerbrettAlphabet.upper()] = secondSteckerbrettAlphabet.upper()
+# print("Input alpha, beta and gamma rotors")
+# alphaRotor = int(input("Alpha Rotor = "))
+# betaRotor = int(input("Beta Rotor = "))
+# gammaRotor = int(input("Gamma Rotor = "))
+# for letter in list(steckerbrettDictionary.keys()):
+#     if letter in alphabetList:
+#         alphabetList.remove(letter)
+#         alphabetList.remove(steckerbrettDictionary[letter])
+#         steckerbrettDictionary.update({steckerbrettDictionary[letter]:letter})
+# reflector = [letter for letter in reversed(alphabetList)]
 
 def permutate(rotor, alphabetList):
     newAlphabet = ''.join(alphabetList)
@@ -75,4 +75,4 @@ def printWrapFiveCharacters(message):
         print(i, end=' ')
     print()
 
-print(encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList))
+#print(encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList))

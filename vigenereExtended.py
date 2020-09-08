@@ -9,7 +9,7 @@ def generateKey(string, key):
 			key.append(key[i % len(key)]) 
 	return("" . join(key)) 
 
-def encryptByteExtendedVignere(bytePlainText, key):
+def encryptByteExtendedVigenere(bytePlainText, key):
     result = [[0] for i in range(len(bytePlainText))]
     key = key.strip().upper()
     keyIndex = 0
@@ -21,7 +21,7 @@ def encryptByteExtendedVignere(bytePlainText, key):
         keyIndex+=1
     return result
 
-def decryptByteExtendedVignere(byteCipherText, key):
+def decryptByteExtendedVigenere(byteCipherText, key):
     result = [[0] for i in range(len(byteCipherText))]
     key = key.strip().upper()
     keyIndex = 0
@@ -33,7 +33,7 @@ def decryptByteExtendedVignere(byteCipherText, key):
         keyIndex+=1
     return result
 
-def encryptTextExtendedVignere(plaintext, key):
+def encryptTextExtendedVigenere(plaintext, key):
     result = [[0] for i in range(len(plaintext))]
     key = key.strip().upper()
     keyIndex = 0
@@ -45,7 +45,7 @@ def encryptTextExtendedVignere(plaintext, key):
         keyIndex+=1
     return result
 
-def decryptTextExtendedVignere(cipherText, key):
+def decryptTextExtendedVigenere(cipherText, key):
     result = [[0] for i in range(len(cipherText))]
     key = key.strip().upper()
     keyIndex = 0
@@ -69,15 +69,15 @@ if __name__ == "__main__":
         while (byte := f.read(1)):
             listOfBytes.append(byte)
     f.close()
-    keyword = "VignereExample"
+    keyword = "VigenereExample"
     key = generateKey(listOfBytes, keyword) 
-    cipherText = encryptByteExtendedVignere(listOfBytes, key)
-    g = open("vignereExtendedEncrypted.mp4", "wb+")
+    cipherText = encryptByteExtendedVigenere(listOfBytes, key)
+    g = open("VigenereExtendedEncrypted.mp4", "wb+")
     for index in range(len(cipherText)):
         g.write(cipherText[index])
     g.close()
-    decryptedText = decryptByteExtendedVignere(cipherText, key)
-    h = open("vignereExtendedDecrypted.mp4", "wb+")
+    decryptedText = decryptByteExtendedVigenere(cipherText, key)
+    h = open("VigenereExtendedDecrypted.mp4", "wb+")
     for index in range(len(decryptedText)):
         h.write(decryptedText[index])
     h.close()
