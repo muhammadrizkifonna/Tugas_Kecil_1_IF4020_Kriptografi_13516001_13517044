@@ -36,8 +36,40 @@ while True:
     elif event=='Encrypt':
         if values['vignere'] == True:
             window['-CIPHERTEXT_ENCRYPT-'].update(vg.encryption(values['-PLAINTEXT_ENCRYPT-'], values['-KEY_ENCRYPT-']))
+        if values['FullVignere'] == True:
+            pass
+        if values['RunningKeyVignere'] == True:
+            pass
+        if values['ExtendedVignere'] == True:
+            pass
+        if values['Playfair'] == True:
+            pass
+        if values['SuperEncryption'] == True:
+            pass
+        if values['Affine'] == True:
+            pass
+        if values['Hill'] == True:
+            pass
+        if values['Enigma'] == True:
+            pass
     elif event=='Decrypt':
         if values['vignere'] == True:
             window['-CIPHERTEXT_DECRYPT-'].update(vg.decryption(values['-PLAINTEXT_DECRYPT-'], values['-KEY_DECRYPT-']))
+        if values['FullVignere'] == True:
+            pass
+        if values['RunningKeyVignere'] == True:
+            pass
+        if values['ExtendedVignere'] == True:
+            pass
+        if values['Playfair'] == True:
+            pass
+        if values['SuperEncryption'] == True:
+            pass
+        if values['Affine'] == True:
+            pass
+        if values['Hill'] == True:
+            pass
+        if values['Enigma'] == True:
+            pass
 
 window.close()
