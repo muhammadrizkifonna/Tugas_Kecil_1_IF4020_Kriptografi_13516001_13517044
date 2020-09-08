@@ -1,10 +1,10 @@
-def encryption():
+def encryption(plaintext, key):
     #Input plaintext
 
-    plaintext = input("Masukkan plaintext:")
+    #plaintext = input("Masukkan plaintext:")
 
     #Input key from user#
-    key = input("Masukkan key:")
+    #key = input("Masukkan key:")
 
     #Compare plaintext and key's length#
     if (len(key)<len(plaintext)):
@@ -37,17 +37,21 @@ def encryption():
     return ciphertext
 
 
-def decryption():
+def decryption(ciphertext, key):
     #Input plaintext
 
-    ciphertext = input("Masukkan ciphertext:")
+    #ciphertext = input("Masukkan ciphertext:")
 
     print(ciphertext[0])
 
     #Input key from user#
-    key = input("Masukkan key:")
+    #key = input("Masukkan key:")
 
     #print(key)
+
+    #Convert into lowercase#
+    ciphertext=ciphertext.lower()
+    key=key.lower()
 
     #Compare plaintext and key's length#
     if (len(key)<len(ciphertext)):
@@ -92,4 +96,4 @@ def decryption():
 print("Ciphertext:"+encryption())
 """
 #Outputs the plaintext#
-print("Ciphertext:"+decryption())
+#print("Ciphertext:"+decryption())
