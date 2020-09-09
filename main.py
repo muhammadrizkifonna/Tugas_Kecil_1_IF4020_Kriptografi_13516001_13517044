@@ -2,6 +2,7 @@ import PySimpleGUI as sg
 import vigenere as vg
 import full_vigenere as fvg
 import autokey_vigenere as avg
+import affine as af
 import vigenereExtended as vge
 import enigma as e
 import playfair as p
@@ -20,12 +21,16 @@ layout = [[sg.Text('Cipher method')],
             [sg.Text('Encryption')], 
             [sg.Text('Enter Plaintext:'), sg.Input(key='-PLAINTEXT_ENCRYPT-')], 
             [sg.Text('Enter key:'), sg.Input(key='-KEY_ENCRYPT-')],
+            [sg.Text('Enter m key (for Affine):'), sg.Input(key='-KEY_ENCRYPT_M-')],
+            [sg.Text('Enter b key (for Affine):'), sg.Input(key='-KEY_ENCRYPT_B-')],
             [sg.Text('Enter Filename (Path):'), sg.Input(key='-PATH_ENCRYPT-')],
             [sg.Text('Ciphertext:'), sg.Text(size=(30,1), key='-CIPHERTEXT_ENCRYPT-')],
             [sg.Button('Encrypt'), sg.Button('Encrypt Text File'), sg.Button("Output into Text File"), sg.Button('Exit')],
             [sg.Text('Decryption')],
             [sg.Text('Enter Ciphertext:'), sg.Input(key='-CIPHERTEXT_DECRYPT-')],
             [sg.Text('Enter key:'), sg.Input(key='-KEY_DECRYPT-')],
+            [sg.Text('Enter m key (for Affine):'), sg.Input(key='-KEY_DECRYPT_M-')],
+            [sg.Text('Enter b key (for Affine):'), sg.Input(key='-KEY_DECRYPT_B-')],
             [sg.Text('Plaintext:'), sg.Text(size=(30,1), key='-PLAINTEXT_DECRYPT-')],
             [sg.Button('Decrypt'), sg.Button('Exit')]]
             
@@ -50,7 +55,7 @@ while True:
         if values['SuperEncryption'] == True:
             pass
         if values['Affine'] == True:
-            pass
+            window['-CIPHERTEXT_ENCRYPT-'].update(af.encryption(values['-PLAINTEXT_ENCRYPT-'], values['-KEY_ENCRYPT_M-'], values['-KEY_ENCRYPT_B-'], False, '', False))
         if values['Hill'] == True:
             pass
         if values['Enigma'] == True:
@@ -109,7 +114,7 @@ while True:
         if values['SuperEncryption'] == True:
             pass
         if values['Affine'] == True:
-            pass
+            window['-PLAINTEXT_DECRYPT-'].update(af.decryption(values['-CIPHERTEXT_DECRYPT-'], values['-KEY_DECRYPT_M-'], values['-KEY_DECRYPT_B-']))
         if values['Hill'] == True:
             pass
         if values['Enigma'] == True:
