@@ -1,10 +1,22 @@
-def encryption(plaintext, key):
+def write_to_file(path, ciphertext):
+    file1 = open(path,"w") 
+    file1.write(ciphertext) 
+    file1.close()
+
+
+def encryption(plaintext, key, from_file, path, write_to_file):
     #Input plaintext
 
     #plaintext = input("Masukkan plaintext:")
 
     #Input key from user#
     #key = input("Masukkan key:")
+    if (from_file):
+        file1 = open(path,"r") 
+        plaintext_list = file1.readlines()
+        seperator=''
+        file1.close()
+        plaintext=seperator.join(plaintext_list)
 
     #Convert into lowercase#
     plaintext=plaintext.lower()
@@ -36,8 +48,6 @@ def encryption(plaintext, key):
         if char not in punctuations:
             no_punct = no_punct + char
     key=no_punct
-
-
 
     #Compare plaintext and key's length#
     if (len(key)<len(plaintext)):
