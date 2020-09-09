@@ -73,6 +73,8 @@ def encryption(plaintext, key, from_file, path, write_to_file):
              'w', 'x', 'y', 'z']
     ciphertext=''
     for i in range(len(plaintext)):
+        if (i%5==0) and (i!=0):
+            ciphertext+='-'
         ciphernumber=(alphabet.index(plaintext[i])+alphabet.index(key[i]))%26
         #print(ciphernumber, end=', ')
         ciphertext+=alphabet[ciphernumber]

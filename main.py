@@ -1,5 +1,6 @@
 import PySimpleGUI as sg
 import vigenere as vg
+import full_vigenere as fvg
 import vigenereExtended as vge
 import enigma as e
 import playfair as p
@@ -38,7 +39,7 @@ while True:
         if values['vignere'] == True:
             window['-CIPHERTEXT_ENCRYPT-'].update(vg.encryption(values['-PLAINTEXT_ENCRYPT-'], values['-KEY_ENCRYPT-'], False, '', False))
         if values['FullVignere'] == True:
-            pass
+            window['-CIPHERTEXT_ENCRYPT-'].update(fvg.encryption(values['-PLAINTEXT_ENCRYPT-'], values['-KEY_ENCRYPT-'], False, '', False))
         if values['RunningKeyVignere'] == True:
             pass
         if values['ExtendedVignere'] == True:
@@ -207,9 +208,10 @@ while True:
             window['-CIPHERTEXT_ENCRYPT-'].update(e.write_to_file(values['-PATH_ENCRYPT-'], e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList, reflector)))
     elif event=='Decrypt':
         if values['vignere'] == True:
-            window['-CIPHERTEXT_DECRYPT-'].update(vg.decryption(values['-PLAINTEXT_DECRYPT-'], values['-KEY_DECRYPT-']))
+            window['-PLAINTEXT_DECRYPT-'].update(vg.decryption(values['-CIPHERTEXT_DECRYPT-'], values['-KEY_DECRYPT-']))
         if values['FullVignere'] == True:
-            pass
+            #window['-CIPHERTEXT_ENCRYPT-'].update(fvg.encryption(values['-PLAINTEXT_ENCRYPT-'], values['-KEY_ENCRYPT-'], False, '', False))
+            window['-PLAINTEXT_DECRYPT-'].update(fvg.decryption(values['-CIPHERTEXT_DECRYPT-'], values['-KEY_DECRYPT-']))
         if values['RunningKeyVignere'] == True:
             pass
         if values['ExtendedVignere'] == True:
