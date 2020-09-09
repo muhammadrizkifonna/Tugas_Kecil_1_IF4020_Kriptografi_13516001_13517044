@@ -23,14 +23,14 @@ layout = [[sg.Text('Cipher method')],
             [sg.Text('Enter Input Filename (Path):'), sg.Input(key='-PATH_SOURCE_ENCRYPT-')],
             [sg.Text('Enter Output Filename (Path):'), sg.Input(key='-PATH_ENCRYPT-')],
             [sg.Text('Ciphertext:'), sg.Text(size=(30,1), key='-CIPHERTEXT_ENCRYPT-')],
-            [sg.Button('Encrypt'), sg.Button('Encrypt Text File'), sg.Button("Output into Text File"), sg.Button('Exit')],
+            [sg.Button('Encrypt'), sg.Button('Encrypt Text File'), sg.Button('Encrypt from Text File, Output into Text File'), sg.Button("Output into Text File"), sg.Button('Exit')],
             [sg.Text('Decryption')],
             [sg.Text('Enter Ciphertext:'), sg.Input(key='-CIPHERTEXT_DECRYPT-')],
             [sg.Text('Enter key:'), sg.Input(key='-KEY_DECRYPT-')],
             [sg.Text('Enter Input Filename (Path):'), sg.Input(key='-PATH_SOURCE_DECRYPT-')],
             [sg.Text('Enter Output Filename (Path):'), sg.Input(key='-PATH_DECRYPT-')],
             [sg.Text('Plaintext:'), sg.Text(size=(30,1), key='-PLAINTEXT_DECRYPT-')],
-            [sg.Button('Decrypt'), sg.Button('Exit')]]
+            [sg.Button('Decrypt'), sg.Button('Decrypt Text File'), sg.Button('Decrypt from Text File, Output into Text File'), sg.Button("Output into Text File"), sg.Button('Exit')]]
             
 
 window = sg.Window('Cryptography Program', layout)
