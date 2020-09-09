@@ -1,10 +1,53 @@
-def encryption(plaintext, key):
+def write_to_file(path, ciphertext):
+    file1 = open(path,"w") 
+    file1.write(ciphertext) 
+    file1.close()
+
+
+def encryption(plaintext, key, from_file, path, write_to_file):
     #Input plaintext
 
     #plaintext = input("Masukkan plaintext:")
 
     #Input key from user#
     #key = input("Masukkan key:")
+    if (from_file):
+        file1 = open(path,"r") 
+        plaintext_list = file1.readlines()
+        seperator=''
+        file1.close()
+        plaintext=seperator.join(plaintext_list)
+
+    #Convert into lowercase#
+    plaintext=plaintext.lower()
+    key=key.lower()
+
+    #Remove comma
+    plaintext = plaintext.replace(',', '')
+    key = key.replace(',', '')
+    #print(plaintext)
+
+    #Remove space
+    plaintext = plaintext.replace(' ', '')
+    key = key.replace(' ', '')
+
+    #Remove punctuation
+    # Define punctuation
+    punctuations = '''!()-[]{};:'"\,<>./?@#$%^&*_~'''
+
+    # Remove punctuation from plaintext
+    no_punct = ""
+    for char in plaintext:
+        if char not in punctuations:
+            no_punct = no_punct + char
+    plaintext=no_punct
+
+    # Remove punctuation from key
+    no_punct = ""
+    for char in key:
+        if char not in punctuations:
+            no_punct = no_punct + char
+    key=no_punct
 
     #Compare plaintext and key's length#
     if (len(key)<len(plaintext)):
@@ -52,6 +95,34 @@ def decryption(ciphertext, key):
     #Convert into lowercase#
     ciphertext=ciphertext.lower()
     key=key.lower()
+
+    #Remove comma
+    ciphertext = ciphertext.replace(',', '')
+    key = key.replace(',', '')
+
+    #Remove space
+    ciphertext = ciphertext.replace(' ', '')
+    key = key.replace(' ', '')
+
+    #Remove punctuation
+    # Define punctuation
+    punctuations = '''!()-[]{};:'"\,<>./?@#$%^&*_~'''
+
+    # Remove punctuation from ciphertext
+    no_punct = ""
+    for char in ciphertext:
+        if char not in punctuations:
+            no_punct = no_punct + char
+    ciphertext=no_punct
+
+    # Remove punctuation from key
+    no_punct = ""
+    for char in key:
+        if char not in punctuations:
+            no_punct = no_punct + char
+    key=no_punct
+
+
 
     #Compare plaintext and key's length#
     if (len(key)<len(ciphertext)):

@@ -18,12 +18,13 @@ layout = [[sg.Text('Cipher method')],
             [sg.Text('Encryption')], 
             [sg.Text('Enter Plaintext:'), sg.Input(key='-PLAINTEXT_ENCRYPT-')], 
             [sg.Text('Enter key:'), sg.Input(key='-KEY_ENCRYPT-')],
+            [sg.Text('Enter Filename (Path):'), sg.Input(key='-PATH_ENCRYPT-')],
             [sg.Text('Ciphertext:'), sg.Text(size=(30,1), key='-CIPHERTEXT_ENCRYPT-')],
-            [sg.Button('Encrypt'), sg.Button('Exit')],
+            [sg.Button('Encrypt'), sg.Button('Encrypt Text File'), sg.Button("Output into Text File"), sg.Button('Exit')],
             [sg.Text('Decryption')],
-            [sg.Text('Enter Ciphertext:'), sg.Input(key='-PLAINTEXT_DECRYPT-')],
+            [sg.Text('Enter Ciphertext:'), sg.Input(key='-CIPHERTEXT_DECRYPT-')],
             [sg.Text('Enter key:'), sg.Input(key='-KEY_DECRYPT-')],
-            [sg.Text('Ciphertext:'), sg.Text(size=(30,1), key='-CIPHERTEXT_DECRYPT-')],
+            [sg.Text('Plaintext:'), sg.Text(size=(30,1), key='-PLAINTEXT_DECRYPT-')],
             [sg.Button('Decrypt'), sg.Button('Exit')]]
             
 
@@ -35,7 +36,46 @@ while True:
         break
     elif event=='Encrypt':
         if values['vignere'] == True:
-            window['-CIPHERTEXT_ENCRYPT-'].update(vg.encryption(values['-PLAINTEXT_ENCRYPT-'], values['-KEY_ENCRYPT-']))
+            window['-CIPHERTEXT_ENCRYPT-'].update(vg.encryption(values['-PLAINTEXT_ENCRYPT-'], values['-KEY_ENCRYPT-'], False, '', False))
+        if values['FullVignere'] == True:
+            pass
+        if values['RunningKeyVignere'] == True:
+            pass
+        if values['ExtendedVignere'] == True:
+            pass
+        if values['Playfair'] == True:
+            pass
+        if values['SuperEncryption'] == True:
+            pass
+        if values['Affine'] == True:
+            pass
+        if values['Hill'] == True:
+            pass
+        if values['Enigma'] == True:
+            pass
+    elif event=='Encrypt Text File':
+        if values['vignere'] == True:
+            window['-CIPHERTEXT_ENCRYPT-'].update(vg.encryption('', values['-KEY_ENCRYPT-'], True, values['-PATH_ENCRYPT-']))
+        if values['FullVignere'] == True:
+            pass
+        if values['RunningKeyVignere'] == True:
+            pass
+        if values['ExtendedVignere'] == True:
+            pass
+        if values['Playfair'] == True:
+            pass
+        if values['SuperEncryption'] == True:
+            pass
+        if values['Affine'] == True:
+            pass
+        if values['Hill'] == True:
+            pass
+        if values['Enigma'] == True:
+            pass
+
+    elif event=='Output into Text File':
+        if values['vignere'] == True:
+            window['-CIPHERTEXT_ENCRYPT-'].update(vg.write_to_file(values['-PATH_ENCRYPT-'], vg.encryption(values['-PLAINTEXT_ENCRYPT-'], values['-KEY_ENCRYPT-'], False, '', False)))
         if values['FullVignere'] == True:
             pass
         if values['RunningKeyVignere'] == True:
