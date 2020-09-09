@@ -68,6 +68,12 @@ def write_to_file(path, text):
     file1.write(text) 
     file1.close()
 
+def readTextFromFile(path):
+    file1 = open(path, "r")
+    data = file1.read()
+    file1.close()
+    return data
+
 if __name__ == "__main__": 
     listOfBytes = []
     with open("videoplayback.mp4", "rb") as f:

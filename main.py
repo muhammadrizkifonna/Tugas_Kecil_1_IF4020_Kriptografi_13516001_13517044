@@ -26,14 +26,14 @@ layout = [[sg.Text('Cipher method')],
             [sg.Text('Enter Input Filename (Path):'), sg.Input(key='-PATH_SOURCE_ENCRYPT-')],
             [sg.Text('Enter Output Filename (Path):'), sg.Input(key='-PATH_ENCRYPT-')],
             [sg.Text('Ciphertext:'), sg.Text(size=(30,1), key='-CIPHERTEXT_ENCRYPT-')],
-            [sg.Button('Encrypt'), sg.Button('Encrypt Text File'), sg.Button('Encrypt from Text File, Output into Text File'), sg.Button("Encrypt Output into Text File"), sg.Button('Exit')],
+            [sg.Button('Encrypt'), sg.Button('Encrypt Text File'), sg.Button('Encrypt File, Output File'), sg.Button('Encrypt from Text File, Output into Text File'), sg.Button("Encrypt Output into Text File"), sg.Button('Exit')],
             [sg.Text('Decryption')],
             [sg.Text('Enter Ciphertext:'), sg.Input(key='-CIPHERTEXT_DECRYPT-')],
             [sg.Text('Enter key:'), sg.Input(key='-KEY_DECRYPT-')],
             [sg.Text('Enter Input Filename (Path):'), sg.Input(key='-PATH_SOURCE_DECRYPT-')],
             [sg.Text('Enter Output Filename (Path):'), sg.Input(key='-PATH_DECRYPT-')],
             [sg.Text('Plaintext:'), sg.Text(size=(30,1), key='-PLAINTEXT_DECRYPT-')],
-            [sg.Button('Decrypt'), sg.Button('Decrypt Text File'), sg.Button('Decrypt from Text File, Output into Text File'), sg.Button("Decrypt Output into Text File"), sg.Button('Exit')]]
+            [sg.Button('Decrypt'), sg.Button('Decrypt Text File'), sg.Button('Decrypt File, Output File'), sg.Button('Decrypt from Text File, Output into Text File'), sg.Button("Decrypt Output into Text File"), sg.Button('Exit')]]
             
 
 window = sg.Window('Cryptography Program', layout)
@@ -125,7 +125,97 @@ while True:
         if values['RunningKeyVignere'] == True:
             pass
         if values['ExtendedVignere'] == True:
+            message = e.readTextFromFile(values['-PATH_SOURCE_ENCRYPT-'])
+            key = values['-KEY_ENCRYPT-']
+            window['-CIPHERTEXT_ENCRYPT-'].update(vge.encryptTextExtendedVigenere(message, key))
+        if values['Playfair'] == True:
+            message = e.readTextFromFile(values['-PATH_SOURCE_ENCRYPT-'])
+            key = values['-KEY_ENCRYPT-']
+            window['-CIPHERTEXT_ENCRYPT-'].update(p.toUpperCase(p.playfairEncrypt(message, key)))
+        if values['SuperEncryption'] == True:
             pass
+        if values['Affine'] == True:
+            pass
+        if values['Hill'] == True:
+            message = e.readTextFromFile(values['-PATH_SOURCE_ENCRYPT-'])
+            key = values['-KEY_ENCRYPT-']
+            resultList = []
+            message = h.toUpperCase(message)
+            message = h.wrap(message, 3)
+            if (len(key)<9):
+                real_key=key
+                times = 9//len(key)
+
+                for i in range(times-1):
+                    key+=real_key
+
+                sisa = 9-len(key)
+
+                for i in range(sisa):
+                    key+=real_key[i]
+
+            #If key>plaintext#
+            elif (len(key)>9):
+                key=key[:9]
+
+            for messagePart in message:
+                add = 0
+                if len(messagePart) < 3:
+                    add = 3 - len(messagePart) 
+                    for i in range(add):
+                        messagePart = ''.join([messagePart, 'X'])
+                cipherText = h.HillCipherEncryption(messagePart, key)
+                # if add > 0:
+                #     for i in range(add):
+                #         cipherText = cipherText[:-1]
+                resultList.append(cipherText)
+            resultMessage = ''.join(resultList)
+            window['-CIPHERTEXT_ENCRYPT-'].update(resultMessage)
+        if values['Enigma'] == True:
+            text = e.readTextFromFile(values['-PATH_SOURCE_ENCRYPT-'])
+            alphabet= "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+            alphabetList = list(alphabet)
+            steckerbrettDictionary = {' ': ' '}
+            pairsInSteckerbrett = sg.popup_get_text('Input the number of pairs in steckerbrett (min 0)', 'Input the number of pairs in steckerbrett')
+            for i in range(int(pairsInSteckerbrett)):
+                firstSteckerbrettAlphabet = sg.popup_get_text("Pair #" + str(i+1),"Input the first alphabet in pair: ")
+                secondSteckerbrettAlphabet = sg.popup_get_text("Pair #" + str(i+1), "Input the second alphabet in pair: ")
+                steckerbrettDictionary[firstSteckerbrettAlphabet.upper()] = secondSteckerbrettAlphabet.upper()
+            #print("Input alpha, beta and gamma rotor s")
+            alphaRotor = int(sg.popup_get_text("Input Alpha Rotor shift (0-25)", "Input Alpha Rotor shift (0-25)"))
+            betaRotor = int(sg.popup_get_text("Input Beta Rotor shift (0-25)", "Input Beta Rotor shift (0-25)"))
+            gammaRotor = int(sg.popup_get_text("Input Gamma Rotor shift (0-25)", "Input Gamma Rotor shift (0-25)"))
+            for letter in list(steckerbrettDictionary.keys()):
+                if letter in alphabetList:
+                    alphabetList.remove(letter)
+                    alphabetList.remove(steckerbrettDictionary[letter])
+                    steckerbrettDictionary.update({steckerbrettDictionary[letter]:letter})
+            reflector = [letter for letter in reversed(alphabetList)]
+            window['-CIPHERTEXT_ENCRYPT-'].update(e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList, reflector))
+    
+    elif event=='Encrypt File, Output File':
+        if values['ExtendedVignere'] == True:
+            listOfBytes = []
+            with open(values['-PATH_SOURCE_ENCRYPT-'], "rb") as f:
+                while (byte := f.read(1)):
+                    listOfBytes.append(byte)
+            f.close()
+            keyword = values['-KEY_ENCRYPT-']
+            key = vge.generateKey(listOfBytes, keyword)
+            g = open(values['-PATH_ENCRYPT-'], "wb+")
+            for index in range(len(cipherText)):
+                g.write(cipherText[index])
+            g.close()
+
+    elif event=='Encrypt from Text File, Output into Text File':
+        if values['vignere'] == True:
+            pass
+        if values['FullVignere'] == True:
+            pass
+        if values['RunningKeyVignere'] == True:
+            pass
+        if values['ExtendedVignere'] == True:
+            pass   
         if values['Playfair'] == True:
             pass
         if values['SuperEncryption'] == True:
@@ -135,7 +225,6 @@ while True:
         if values['Hill'] == True:
             pass
         if values['Enigma'] == True:
-            print(values['-PATH_ENCRYPT-'])
             pass
 
     elif event=='Encrypt Output into Text File':
@@ -289,5 +378,68 @@ while True:
                     steckerbrettDictionary.update({steckerbrettDictionary[letter]:letter})
             reflector = [letter for letter in reversed(alphabetList)]
             window['-PLAINTEXT_DECRYPT-'].update(e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList, reflector))
+    
+    elif event=='Decrypt Text File':
+        if values['vignere'] == True:
+            pass
+        if values['FullVignere'] == True:
+            pass
+        if values['RunningKeyVignere'] == True:
+            pass
+        if values['ExtendedVignere'] == True:
+            pass   
+        if values['Playfair'] == True:
+            pass
+        if values['SuperEncryption'] == True:
+            pass
+        if values['Affine'] == True:
+            pass
+        if values['Hill'] == True:
+            pass
+        if values['Enigma'] == True:
+            pass
+
+    elif event == 'Decrypt File, Output File':
+        if values['ExtendedVignere'] == True:
+            pass
+
+    elif event=='Decrypt from Text File, Output into Text File':
+        if values['vignere'] == True:
+            pass
+        if values['FullVignere'] == True:
+            pass
+        if values['RunningKeyVignere'] == True:
+            pass
+        if values['ExtendedVignere'] == True:
+            pass   
+        if values['Playfair'] == True:
+            pass
+        if values['SuperEncryption'] == True:
+            pass
+        if values['Affine'] == True:
+            pass
+        if values['Hill'] == True:
+            pass
+        if values['Enigma'] == True:
+            pass
+    elif event=='Decrypt Output into Text File':
+        if values['vignere'] == True:
+            pass
+        if values['FullVignere'] == True:
+            pass
+        if values['RunningKeyVignere'] == True:
+            pass
+        if values['ExtendedVignere'] == True:
+            pass   
+        if values['Playfair'] == True:
+            pass
+        if values['SuperEncryption'] == True:
+            pass
+        if values['Affine'] == True:
+            pass
+        if values['Hill'] == True:
+            pass
+        if values['Enigma'] == True:
+            pass
 
 window.close()

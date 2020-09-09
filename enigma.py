@@ -50,6 +50,12 @@ def encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRot
             alphaRotor, betaRotor, gammaRotor = turnRotors(alphaRotor, betaRotor, gammaRotor, alphabetList)
     return ''.join(resultText)
 
+def readTextFromFile(path):
+    file1 = open(path, "r")
+    data = file1.read()
+    file1.close()
+    return data
+
 def write_to_file(path, text):
     file1 = open(path,"w+") 
     file1.write(text) 

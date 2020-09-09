@@ -90,6 +90,12 @@ def write_to_file(path, text):
     file1.write(text) 
     file1.close()
 
+def readTextFromFile(path):
+    file1 = open(path, "r")
+    data = file1.read()
+    file1.close()
+    return data
+
 def main():
     # orig = "Hide the gold in... the TREESTUMP!!!"
     key = "Playfair example"

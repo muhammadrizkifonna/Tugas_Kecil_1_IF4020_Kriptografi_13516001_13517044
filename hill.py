@@ -130,6 +130,12 @@ def write_to_file(path, text):
     file1.write(text) 
     file1.close()
 
+def readTextFromFile(path):
+    file1 = open(path, "r")
+    data = file1.read()
+    file1.close()
+    return data
+
 def main(): 
     #3x3 Hill Cipher
     message = "AC.T"
