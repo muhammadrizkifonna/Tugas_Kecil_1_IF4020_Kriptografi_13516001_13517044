@@ -57,11 +57,17 @@ while True:
         if values['ExtendedVignere'] == True:
             message = values['-PLAINTEXT_ENCRYPT-']
             key = values['-KEY_ENCRYPT-']
-            window['-CIPHERTEXT_ENCRYPT-'].update(vge.encryptTextExtendedVigenere(message, key))
+            if values['FiveChar'] == True:
+                window['-CIPHERTEXT_ENCRYPT-'].update(vge.wrapFiveCharacters(vge.encryptTextExtendedVigenere(message, key)))
+            else:
+                window['-CIPHERTEXT_ENCRYPT-'].update(vge.encryptTextExtendedVigenere(message, key))
         if values['Playfair'] == True:
             message = values['-PLAINTEXT_ENCRYPT-']
             key = values['-KEY_ENCRYPT-']
-            window['-CIPHERTEXT_ENCRYPT-'].update(p.toUpperCase(p.playfairEncrypt(message, key)))
+            if values['FiveChar'] == True:
+                window['-CIPHERTEXT_ENCRYPT-'].update(p.wrapFiveCharacters(p.toUpperCase(p.playfairEncrypt(message, key))))
+            else:
+                window['-CIPHERTEXT_ENCRYPT-'].update(p.toUpperCase(p.playfairEncrypt(message, key)))
         if values['SuperEncryption'] == True:
             pass
         if values['Affine'] == True:
@@ -100,7 +106,10 @@ while True:
                 #         cipherText = cipherText[:-1]
                 resultList.append(cipherText)
             resultMessage = ''.join(resultList)
-            window['-CIPHERTEXT_ENCRYPT-'].update(resultMessage)
+            if values['FiveChar'] == True:
+                window['-CIPHERTEXT_ENCRYPT-'].update(h.wrapFiveCharacters(resultMessage))
+            else:
+                window['-CIPHERTEXT_ENCRYPT-'].update(resultMessage)
         if values['Enigma'] == True:
             text = values['-PLAINTEXT_ENCRYPT-']
             alphabet= "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -121,7 +130,10 @@ while True:
                     alphabetList.remove(steckerbrettDictionary[letter])
                     steckerbrettDictionary.update({steckerbrettDictionary[letter]:letter})
             reflector = [letter for letter in reversed(alphabetList)]
-            window['-CIPHERTEXT_ENCRYPT-'].update(e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList, reflector))
+            if values['FiveChar'] == True:
+                window['-CIPHERTEXT_ENCRYPT-'].update(e.wrapFiveCharacters(e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList, reflector)))
+            else:
+                window['-CIPHERTEXT_ENCRYPT-'].update(e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList, reflector))
     elif event=='Encrypt Text File':
         if values['vignere'] == True:
             window['-CIPHERTEXT_ENCRYPT-'].update(vg.encryption('', values['-KEY_ENCRYPT-'], True, values['-PATH_ENCRYPT-']))
@@ -132,11 +144,17 @@ while True:
         if values['ExtendedVignere'] == True:
             message = e.readTextFromFile(values['-PATH_SOURCE_ENCRYPT-'])
             key = values['-KEY_ENCRYPT-']
-            window['-CIPHERTEXT_ENCRYPT-'].update(vge.encryptTextExtendedVigenere(message, key))
+            if values['FiveChar'] == True:
+                window['-CIPHERTEXT_ENCRYPT-'].update(vge.wrapFiveCharacters(vge.encryptTextExtendedVigenere(message, key)))
+            else:
+                window['-CIPHERTEXT_ENCRYPT-'].update(vge.encryptTextExtendedVigenere(message, key))
         if values['Playfair'] == True:
             message = e.readTextFromFile(values['-PATH_SOURCE_ENCRYPT-'])
             key = values['-KEY_ENCRYPT-']
-            window['-CIPHERTEXT_ENCRYPT-'].update(p.toUpperCase(p.playfairEncrypt(message, key)))
+            if values['FiveChar'] == True:
+                window['-CIPHERTEXT_ENCRYPT-'].update(p.wrapFiveCharacters(p.toUpperCase(p.playfairEncrypt(message, key))))
+            else:
+                window['-CIPHERTEXT_ENCRYPT-'].update(p.toUpperCase(p.playfairEncrypt(message, key)))
         if values['SuperEncryption'] == True:
             pass
         if values['Affine'] == True:
@@ -174,8 +192,12 @@ while True:
                 #     for i in range(add):
                 #         cipherText = cipherText[:-1]
                 resultList.append(cipherText)
+            
             resultMessage = ''.join(resultList)
-            window['-CIPHERTEXT_ENCRYPT-'].update(resultMessage)
+            if values['FiveChar'] == True:
+                window['-CIPHERTEXT_ENCRYPT-'].update(h.wrapFiveCharacters(resultMessage))
+            else:
+                window['-CIPHERTEXT_ENCRYPT-'].update(resultMessage)
         if values['Enigma'] == True:
             text = e.readTextFromFile(values['-PATH_SOURCE_ENCRYPT-'])
             alphabet= "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -196,7 +218,10 @@ while True:
                     alphabetList.remove(steckerbrettDictionary[letter])
                     steckerbrettDictionary.update({steckerbrettDictionary[letter]:letter})
             reflector = [letter for letter in reversed(alphabetList)]
-            window['-CIPHERTEXT_ENCRYPT-'].update(e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList, reflector))
+            if values['FiveChar'] == True:
+                window['-CIPHERTEXT_ENCRYPT-'].update(e.wrapFiveCharacters(e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList, reflector)))
+            else:
+                window['-CIPHERTEXT_ENCRYPT-'].update(e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList, reflector))
     
     elif event=='Encrypt File, Output File':
         if values['ExtendedVignere'] == True:
@@ -207,6 +232,7 @@ while True:
             f.close()
             keyword = values['-KEY_ENCRYPT-']
             key = vge.generateKey(listOfBytes, keyword)
+            cipherText = vge.encryptByteExtendedVigenere(listOfBytes, key)
             g = open(values['-PATH_ENCRYPT-'], "wb+")
             for index in range(len(cipherText)):
                 g.write(cipherText[index])
@@ -222,11 +248,17 @@ while True:
         if values['ExtendedVignere'] == True:
             message = e.readTextFromFile(values['-PATH_SOURCE_ENCRYPT-'])
             key = values['-KEY_ENCRYPT-']
-            window['-CIPHERTEXT_ENCRYPT-'].update(vge.write_to_file(values['-PATH_ENCRYPT-'], vge.encryptTextExtendedVigenere(message, key)))  
+            if values['FiveChar'] == True:
+                window['-CIPHERTEXT_ENCRYPT-'].update(vge.write_to_file(values['-PATH_ENCRYPT-'], vge.wrapFiveCharacters(vge.encryptTextExtendedVigenere(message, key))))
+            else:
+                window['-CIPHERTEXT_ENCRYPT-'].update(vge.write_to_file(values['-PATH_ENCRYPT-'], vge.encryptTextExtendedVigenere(message, key)))  
         if values['Playfair'] == True:
             message = e.readTextFromFile(values['-PATH_SOURCE_ENCRYPT-'])
             key = values['-KEY_ENCRYPT-']
-            window['-CIPHERTEXT_ENCRYPT-'].update(p.write_to_file(values['-PATH_ENCRYPT-'], p.toUpperCase(p.playfairEncrypt(message, key))))
+            if values['FiveChar'] == True:
+                window['-CIPHERTEXT_ENCRYPT-'].update(p.write_to_file(values['-PATH_ENCRYPT-'], p.wrapFiveCharacters(p.toUpperCase(p.playfairEncrypt(message, key)))))
+            else:
+                window['-CIPHERTEXT_ENCRYPT-'].update(p.write_to_file(values['-PATH_ENCRYPT-'], p.toUpperCase(p.playfairEncrypt(message, key))))
         if values['SuperEncryption'] == True:
             pass
         if values['Affine'] == True:
@@ -265,7 +297,10 @@ while True:
                 #         cipherText = cipherText[:-1]
                 resultList.append(cipherText)
             resultMessage = ''.join(resultList)
-            window['-CIPHERTEXT_ENCRYPT-'].update(h.write_to_file(values['-PATH_ENCRYPT-'], resultMessage))
+            if values['FiveChar'] == True:
+                window['-CIPHERTEXT_ENCRYPT-'].update(h.write_to_file(values['-PATH_ENCRYPT-'], h.wrapFiveCharacters(resultMessage)))
+            else:
+                window['-CIPHERTEXT_ENCRYPT-'].update(h.write_to_file(values['-PATH_ENCRYPT-'], resultMessage))
         if values['Enigma'] == True:
             text = e.readTextFromFile(values['-PATH_SOURCE_ENCRYPT-'])
             alphabet= "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -286,7 +321,10 @@ while True:
                     alphabetList.remove(steckerbrettDictionary[letter])
                     steckerbrettDictionary.update({steckerbrettDictionary[letter]:letter})
             reflector = [letter for letter in reversed(alphabetList)]
-            window['-CIPHERTEXT_ENCRYPT-'].update(e.write_to_file(values['-PATH_ENCRYPT-'], e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList, reflector)))
+            if values['FiveChar'] == True:
+                window['-CIPHERTEXT_ENCRYPT-'].update(e.write_to_file(values['-PATH_ENCRYPT-'], e.wrapFiveCharacters(e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList, reflector))))
+            else:
+                window['-CIPHERTEXT_ENCRYPT-'].update(e.write_to_file(values['-PATH_ENCRYPT-'], e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList, reflector)))
 
     elif event=='Encrypt Output into Text File':
         if values['vignere'] == True:
@@ -298,11 +336,17 @@ while True:
         if values['ExtendedVignere'] == True:
             message = values['-PLAINTEXT_ENCRYPT-']
             key = values['-KEY_ENCRYPT-']
-            window['-CIPHERTEXT_ENCRYPT-'].update(vge.write_to_file(values['-PATH_ENCRYPT-'], vge.encryptTextExtendedVigenere(message, key)))
+            if values['FiveChar'] == True:
+                window['-CIPHERTEXT_ENCRYPT-'].update(vge.write_to_file(values['-PATH_ENCRYPT-'], vge.wrapFiveCharacters(vge.encryptTextExtendedVigenere(message, key))))
+            else:
+                window['-CIPHERTEXT_ENCRYPT-'].update(vge.write_to_file(values['-PATH_ENCRYPT-'], vge.encryptTextExtendedVigenere(message, key)))
         if values['Playfair'] == True:
             message = values['-PLAINTEXT_ENCRYPT-']
             key = values['-KEY_ENCRYPT-']
-            window['-CIPHERTEXT_ENCRYPT-'].update(p.write_to_file(values['-PATH_ENCRYPT-'], p.toUpperCase(p.playfairEncrypt(message, key))))
+            if values['FiveChar'] == True:
+                window['-CIPHERTEXT_ENCRYPT-'].update(p.write_to_file(values['-PATH_ENCRYPT-'], p.wrapFiveCharacters(p.toUpperCase(p.playfairEncrypt(message, key)))))
+            else:
+                window['-CIPHERTEXT_ENCRYPT-'].update(p.write_to_file(values['-PATH_ENCRYPT-'], p.toUpperCase(p.playfairEncrypt(message, key))))
         if values['SuperEncryption'] == True:
             pass
         if values['Affine'] == True:
@@ -341,7 +385,10 @@ while True:
                 #         cipherText = cipherText[:-1]
                 resultList.append(cipherText)
             resultMessage = ''.join(resultList)
-            window['-CIPHERTEXT_ENCRYPT-'].update(h.write_to_file(values['-PATH_ENCRYPT-'], resultMessage))
+            if values['FiveChar'] == True:
+                window['-CIPHERTEXT_ENCRYPT-'].update(h.write_to_file(values['-PATH_ENCRYPT-'], h.wrapFiveCharacters(resultMessage)))
+            else:
+                window['-CIPHERTEXT_ENCRYPT-'].update(h.write_to_file(values['-PATH_ENCRYPT-'], resultMessage))
         if values['Enigma'] == True:
             text = values['-PLAINTEXT_ENCRYPT-']
             alphabet= "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -362,7 +409,10 @@ while True:
                     alphabetList.remove(steckerbrettDictionary[letter])
                     steckerbrettDictionary.update({steckerbrettDictionary[letter]:letter})
             reflector = [letter for letter in reversed(alphabetList)]
-            window['-CIPHERTEXT_ENCRYPT-'].update(e.write_to_file(values['-PATH_ENCRYPT-'], e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList, reflector)))
+            if values['FiveChar'] == True:
+                window['-CIPHERTEXT_ENCRYPT-'].update(e.write_to_file(values['-PATH_ENCRYPT-'], e.wrapFiveCharacters(e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList, reflector))))
+            else:
+                window['-CIPHERTEXT_ENCRYPT-'].update(e.write_to_file(values['-PATH_ENCRYPT-'], e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList, reflector)))
     elif event=='Decrypt':
         if values['vignere'] == True:
             window['-PLAINTEXT_DECRYPT-'].update(vg.decryption(values['-CIPHERTEXT_DECRYPT-'], values['-KEY_DECRYPT-']))
@@ -448,21 +498,101 @@ while True:
         if values['RunningKeyVignere'] == True:
             pass
         if values['ExtendedVignere'] == True:
-            pass   
+            message = e.readTextFromFile(values['-PATH_SOURCE_DECRYPT-'])
+            key = values['-KEY_DECRYPT-']
+            if values['FiveChar'] == True:
+                window['-PLAINTEXT_DECRYPT-'].update(vge.wrapFiveCharacters(vge.decryptTextExtendedVigenere(message, key)))
+            else:
+                window['-PLAINTEXT_DECRYPT-'].update(vge.decryptTextExtendedVigenere(message, key))
         if values['Playfair'] == True:
-            pass
+            message = e.readTextFromFile(values['-PATH_SOURCE_DECRYPT-'])
+            key = values['-KEY_DECRYPT-']
+            if values['FiveChar'] == True:
+                window['-PLAINTEXT_DECRYPT-'].update(p.wrapFiveCharacters(p.toUpperCase(p.playfairDecrypt(message, key))))
+            else:
+                window['-PLAINTEXT_DECRYPT-'].update(p.toUpperCase(p.playfairDecrypt(message, key)))
         if values['SuperEncryption'] == True:
             pass
         if values['Affine'] == True:
             pass
         if values['Hill'] == True:
-            pass
+            message = e.readTextFromFile(values['-PATH_SOURCE_DECRYPT-'])
+            key = values['-KEY_DECRYPT-']
+            resultList = []
+            message = h.toUpperCase(message)
+            message = h.wrap(message, 3)
+            if (len(key)<9):
+                real_key=key
+                times = 9//len(key)
+
+                for i in range(times-1):
+                    key+=real_key
+
+                sisa = 9-len(key)
+
+                for i in range(sisa):
+                    key+=real_key[i]
+
+            #If key>plaintext#
+            elif (len(key)>9):
+                key=key[:9]
+
+            for messagePart in message:
+                #add = 0
+                # if len(messagePart) < 3:
+                #     add = 3 - len(messagePart) 
+                #     for i in range(add):
+                #         messagePart = ''.join([messagePart, 'X'])
+                cipherText = h.HillCipherDecryption(messagePart, key)
+                # if add > 0:
+                #     for i in range(add):
+                #         cipherText = cipherText[:-1]
+                resultList.append(cipherText)
+            
+            resultMessage = ''.join(resultList)
+            if values['FiveChar'] == True:
+                window['-PLAINTEXT_DECRYPT-'].update(h.wrapFiveCharacters(resultMessage))
+            else:
+                window['-PLAINTEXT_DECRYPT-'].update(resultMessage)
         if values['Enigma'] == True:
-            pass
+            text = e.readTextFromFile(values['-PATH_SOURCE_DECRYPT-'])
+            alphabet= "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+            alphabetList = list(alphabet)
+            steckerbrettDictionary = {' ': ' '}
+            pairsInSteckerbrett = sg.popup_get_text('Input the number of pairs in steckerbrett (min 0)', 'Input the number of pairs in steckerbrett')
+            for i in range(int(pairsInSteckerbrett)):
+                firstSteckerbrettAlphabet = sg.popup_get_text("Pair #" + str(i+1),"Input the first alphabet in pair: ")
+                secondSteckerbrettAlphabet = sg.popup_get_text("Pair #" + str(i+1), "Input the second alphabet in pair: ")
+                steckerbrettDictionary[firstSteckerbrettAlphabet.upper()] = secondSteckerbrettAlphabet.upper()
+            #print("Input alpha, beta and gamma rotor s")
+            alphaRotor = int(sg.popup_get_text("Input Alpha Rotor shift (0-25)", "Input Alpha Rotor shift (0-25)"))
+            betaRotor = int(sg.popup_get_text("Input Beta Rotor shift (0-25)", "Input Beta Rotor shift (0-25)"))
+            gammaRotor = int(sg.popup_get_text("Input Gamma Rotor shift (0-25)", "Input Gamma Rotor shift (0-25)"))
+            for letter in list(steckerbrettDictionary.keys()):
+                if letter in alphabetList:
+                    alphabetList.remove(letter)
+                    alphabetList.remove(steckerbrettDictionary[letter])
+                    steckerbrettDictionary.update({steckerbrettDictionary[letter]:letter})
+            reflector = [letter for letter in reversed(alphabetList)]
+            if values['FiveChar'] == True:
+                window['-PLAINTEXT_DECRYPT-'].update(e.wrapFiveCharacters(e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList, reflector)))
+            else:
+                window['-PLAINTEXT_DECRYPT-'].update(e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList, reflector))
 
     elif event == 'Decrypt File, Output File':
         if values['ExtendedVignere'] == True:
-            pass
+            listOfBytes = []
+            with open(values['-PATH_SOURCE_DECRYPT-'], "rb") as f:
+                while (byte := f.read(1)):
+                    listOfBytes.append(byte)
+            f.close()
+            keyword = values['-KEY_DECRYPT-']
+            key = vge.generateKey(listOfBytes, keyword)
+            decryptedText = vge.decryptByteExtendedVigenere(listOfBytes, key)
+            h = open(values['-PATH_DECRYPT-'], "wb+")
+            for index in range(len(decryptedText)):
+                h.write(decryptedText[index])
+            h.close()
 
     elif event=='Decrypt from Text File, Output into Text File':
         if values['vignere'] == True:
@@ -472,17 +602,87 @@ while True:
         if values['RunningKeyVignere'] == True:
             pass
         if values['ExtendedVignere'] == True:
-            pass   
+            message = e.readTextFromFile(values['-PATH_SOURCE_DECRYPT-'])
+            key = values['-KEY_DECRYPT-']
+            if values['FiveChar'] == True:
+                window['-PLAINTEXT_DECRYPT-'].update(vge.write_to_file(values['-PATH_DECRYPT-'], vge.wrapFiveCharacters(vge.decryptTextExtendedVigenere(message, key))))
+            else:
+                window['-PLAINTEXT_DECRYPT-'].update(vge.write_to_file(values['-PATH_DECRYPT-'], vge.decryptTextExtendedVigenere(message, key)))  
         if values['Playfair'] == True:
-            pass
+            message = e.readTextFromFile(values['-PATH_SOURCE_DECRYPT-'])
+            key = values['-KEY_DECRYPT-']
+            if values['FiveChar'] == True:
+                window['-PLAINTEXT_DECRYPT-'].update(p.write_to_file(values['-PATH_DECRYPT-'], p.wrapFiveCharacters(p.toUpperCase(p.playfairDecrypt(message, key)))))
+            else:
+                window['-PLAINTEXT_DECRYPT-'].update(p.write_to_file(values['-PATH_DECRYPT-'], p.toUpperCase(p.playfairDecrypt(message, key))))
         if values['SuperEncryption'] == True:
             pass
         if values['Affine'] == True:
             pass
         if values['Hill'] == True:
-            pass
+            message = e.readTextFromFile(values['-PATH_SOURCE_DECRYPT-'])
+            key = values['-KEY_DECRYPT-']
+            resultList = []
+            message = h.toUpperCase(message)
+            message = h.wrap(message, 3)
+            if (len(key)<9):
+                real_key=key
+                times = 9//len(key)
+
+                for i in range(times-1):
+                    key+=real_key
+
+                sisa = 9-len(key)
+
+                for i in range(sisa):
+                    key+=real_key[i]
+
+            #If key>plaintext#
+            elif (len(key)>9):
+                key=key[:9]
+
+            for messagePart in message:
+                add = 0
+                if len(messagePart) < 3:
+                    add = 3 - len(messagePart) 
+                    for i in range(add):
+                        messagePart = ''.join([messagePart, 'X'])
+                cipherText = h.HillCipherDecryption(messagePart, key)
+                # if add > 0:
+                #     for i in range(add):
+                #         cipherText = cipherText[:-1]
+                resultList.append(cipherText)
+            resultMessage = ''.join(resultList)
+            if values['FiveChar'] == True:
+                window['-PLAINTEXT_DECRYPT-'].update(h.write_to_file(values['-PATH_DECRYPT-'], h.wrapFiveCharacters(resultMessage)))
+            else:
+                window['-PLAINTEXT_DECRYPT-'].update(h.write_to_file(values['-PATH_DECRYPT-'], resultMessage))
         if values['Enigma'] == True:
-            pass
+            text = e.readTextFromFile(values['-PATH_SOURCE_DECRYPT-'])
+            alphabet= "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+            alphabetList = list(alphabet)
+            steckerbrettDictionary = {' ': ' '}
+            pairsInSteckerbrett = sg.popup_get_text('Input the number of pairs in steckerbrett (min 0)', 'Input the number of pairs in steckerbrett')
+            for i in range(int(pairsInSteckerbrett)):
+                firstSteckerbrettAlphabet = sg.popup_get_text("Pair #" + str(i+1),"Input the first alphabet in pair: ")
+                secondSteckerbrettAlphabet = sg.popup_get_text("Pair #" + str(i+1), "Input the second alphabet in pair: ")
+                steckerbrettDictionary[firstSteckerbrettAlphabet.upper()] = secondSteckerbrettAlphabet.upper()
+            #print("Input alpha, beta and gamma rotor s")
+            alphaRotor = int(sg.popup_get_text("Input Alpha Rotor shift (0-25)", "Input Alpha Rotor shift (0-25)"))
+            betaRotor = int(sg.popup_get_text("Input Beta Rotor shift (0-25)", "Input Beta Rotor shift (0-25)"))
+            gammaRotor = int(sg.popup_get_text("Input Gamma Rotor shift (0-25)", "Input Gamma Rotor shift (0-25)"))
+            for letter in list(steckerbrettDictionary.keys()):
+                if letter in alphabetList:
+                    alphabetList.remove(letter)
+                    alphabetList.remove(steckerbrettDictionary[letter])
+                    steckerbrettDictionary.update({steckerbrettDictionary[letter]:letter})
+            reflector = [letter for letter in reversed(alphabetList)]
+            if values['FiveChar'] == True:
+                window['-PLAINTEXT_DECRYPT-'].update(e.write_to_file(values['-PATH_DECRYPT-'], e.wrapFiveCharacters(e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList, reflector))))
+            else:
+                window['-PLAINTEXT_DECRYPT-'].update(e.write_to_file(values['-PATH_DECRYPT-'], e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList, reflector)))
+
+        
     elif event=='Decrypt Output into Text File':
         if values['vignere'] == True:
             pass
@@ -491,16 +691,84 @@ while True:
         if values['RunningKeyVignere'] == True:
             pass
         if values['ExtendedVignere'] == True:
-            pass   
+            message = values['-CIPHERTEXT_DECRYPT-']
+            key = values['-KEY_DECRYPT-']
+            if values['FiveChar'] == True:
+                window['-PLAINTEXT_DECRYPT-'].update(vge.write_to_file(values['-PATH_DECRYPT-'], vge.wrapFiveCharacters(vge.decryptTextExtendedVigenere(message, key))))
+            else:
+                window['-PLAINTEXT_DECRYPT-'].update(vge.write_to_file(values['-PATH_DECRYPT-'], vge.decryptTextExtendedVigenere(message, key)))
         if values['Playfair'] == True:
-            pass
+            message = values['-CIPHERTEXT_DECRYPT-']
+            key = values['-KEY_DECRYPT-']
+            if values['FiveChar'] == True:
+                window['-PLAINTEXT_DECRYPT-'].update(p.write_to_file(values['-PATH_DECRYPT-'], p.wrapFiveCharacters(p.toUpperCase(p.playfairDecrypt(message, key)))))
+            else:
+                window['-PLAINTEXT_DECRYPT-'].update(p.write_to_file(values['-PATH_DECRYPT-'], p.toUpperCase(p.playfairDecrypt(message, key))))
         if values['SuperEncryption'] == True:
             pass
         if values['Affine'] == True:
             window['-PLAINTEXT_DECRYPT-'].update(af.decryption(values['-CIPHERTEXT_DECRYPT-'], values['-KEY_DECRYPT_M-'], values['-KEY_DECRYPT_B-']))
         if values['Hill'] == True:
-            pass
+            message = values['-CIPHERTEXT_DECRYPT-']
+            key = values['-KEY_DECRYPT-']
+            resultList = []
+            message = h.toUpperCase(message)
+            message = h.wrap(message, 3)
+            if (len(key)<9):
+                real_key=key
+                times = 9//len(key)
+
+                for i in range(times-1):
+                    key+=real_key
+
+                sisa = 9-len(key)
+
+                for i in range(sisa):
+                    key+=real_key[i]
+
+            #If key>plaintext#
+            elif (len(key)>9):
+                key=key[:9]
+
+            for messagePart in message:
+                add = 0
+                if len(messagePart) < 3:
+                    add = 3 - len(messagePart) 
+                    for i in range(add):
+                        messagePart = ''.join([messagePart, 'X'])
+                cipherText = h.HillCipherDecryption(messagePart, key)
+                # if add > 0:
+                #     for i in range(add):
+                #         cipherText = cipherText[:-1]
+                resultList.append(cipherText)
+            resultMessage = ''.join(resultList)
+            if values['FiveChar'] == True:
+                window['-PLAINTEXT_DECRYPT-'].update(h.write_to_file(values['-PATH_DECRYPT-'], h.wrapFiveCharacters(resultMessage)))
+            else:
+                window['-PLAINTEXT_DECRYPT-'].update(h.write_to_file(values['-PATH_DECRYPT-'], resultMessage))
         if values['Enigma'] == True:
-            pass
+            text = values['-CIPHERTEXT_DECRYPT-']
+            alphabet= "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+            alphabetList = list(alphabet)
+            steckerbrettDictionary = {' ': ' '}
+            pairsInSteckerbrett = sg.popup_get_text('Input the number of pairs in steckerbrett (min 0)', 'Input the number of pairs in steckerbrett')
+            for i in range(int(pairsInSteckerbrett)):
+                firstSteckerbrettAlphabet = sg.popup_get_text("Pair #" + str(i+1),"Input the first alphabet in pair: ")
+                secondSteckerbrettAlphabet = sg.popup_get_text("Pair #" + str(i+1), "Input the second alphabet in pair: ")
+                steckerbrettDictionary[firstSteckerbrettAlphabet.upper()] = secondSteckerbrettAlphabet.upper()
+            #print("Input alpha, beta and gamma rotor s")
+            alphaRotor = int(sg.popup_get_text("Input Alpha Rotor shift (0-25)", "Input Alpha Rotor shift (0-25)"))
+            betaRotor = int(sg.popup_get_text("Input Beta Rotor shift (0-25)", "Input Beta Rotor shift (0-25)"))
+            gammaRotor = int(sg.popup_get_text("Input Gamma Rotor shift (0-25)", "Input Gamma Rotor shift (0-25)"))
+            for letter in list(steckerbrettDictionary.keys()):
+                if letter in alphabetList:
+                    alphabetList.remove(letter)
+                    alphabetList.remove(steckerbrettDictionary[letter])
+                    steckerbrettDictionary.update({steckerbrettDictionary[letter]:letter})
+            reflector = [letter for letter in reversed(alphabetList)]
+            if values['FiveChar'] == True:
+                window['-PLAINTEXT_DECRYPT-'].update(e.write_to_file(values['-PATH_DECRYPT-'], e.wrapFiveCharacters(e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList, reflector))))
+            else:
+                window['-PLAINTEXT_DECRYPT-'].update(e.write_to_file(values['-PATH_DECRYPT-'], e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList, reflector)))
 
 window.close()

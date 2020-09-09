@@ -61,11 +61,10 @@ def write_to_file(path, text):
     file1.write(text) 
     file1.close()
     
-def printWrapFiveCharacters(message):
+def wrapFiveCharacters(message):
     messageWrapFive = wrap(message,5)
-    for i in messageWrapFive:
-        print(i, end=' ')
-    print()
+    return '-'.join(messageWrapFive)
+
 
 def toUpperCase(text):
     return "".join(filter(str.isupper, text.upper()))

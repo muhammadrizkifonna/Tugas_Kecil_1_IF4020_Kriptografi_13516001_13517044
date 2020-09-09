@@ -79,11 +79,9 @@ def playfairDecrypt(message, key, replaceFrom = 'J', replaceTo = 'I'):
     decipheredMessage = " ".join(decryptionDictionary[p] for p in partition(formatMessage(message, replaceFrom, replaceTo), 2))
     return decipheredMessage
 
-def printWrapFiveCharacters(message):
+def wrapFiveCharacters(message):
     messageWrapFive = wrap(message,5)
-    for i in messageWrapFive:
-        print(i, end=' ')
-    print()
+    return '-'.join(messageWrapFive)
  
 def write_to_file(path, text):
     file1 = open(path,"w+") 

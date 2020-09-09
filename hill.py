@@ -116,11 +116,9 @@ def HillCipherDecryption(message, key):
     DecipheredText = "".join(DecipherText)
     return DecipheredText 
 
-def printWrapFiveCharacters(message):
+def wrapFiveCharacters(message):
     messageWrapFive = wrap(message,5)
-    for i in messageWrapFive:
-        print(i, end=' ')
-    print()
+    return '-'.join(messageWrapFive)
 
 def toUpperCase(text):
     return "".join(filter(str.isupper, text.upper()))

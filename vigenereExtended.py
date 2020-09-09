@@ -57,11 +57,9 @@ def decryptTextExtendedVigenere(cipherText, key):
         keyIndex+=1
     return ''.join(i for i in result)
 
-def printWrapFiveCharacters(message):
+def wrapFiveCharacters(message):
     messageWrapFive = wrap(message,5)
-    for i in messageWrapFive:
-        print(i, end=' ')
-    print()
+    return '-'.join(messageWrapFive)
 
 def write_to_file(path, text):
     file1 = open(path,"w+") 
