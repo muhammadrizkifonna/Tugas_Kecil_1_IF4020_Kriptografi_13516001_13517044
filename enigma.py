@@ -50,6 +50,11 @@ def encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRot
             alphaRotor, betaRotor, gammaRotor = turnRotors(alphaRotor, betaRotor, gammaRotor, alphabetList)
     return ''.join(resultText)
 
+def write_to_file(path, text):
+    file1 = open(path,"w+") 
+    file1.write(text) 
+    file1.close()
+    
 def printWrapFiveCharacters(message):
     messageWrapFive = wrap(message,5)
     for i in messageWrapFive:

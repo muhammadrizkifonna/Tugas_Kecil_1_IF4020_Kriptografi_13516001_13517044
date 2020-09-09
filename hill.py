@@ -125,6 +125,11 @@ def printWrapFiveCharacters(message):
 def toUpperCase(text):
     return "".join(filter(str.isupper, text.upper()))
 
+def write_to_file(path, text):
+    file1 = open(path,"w+") 
+    file1.write(text) 
+    file1.close()
+
 def main(): 
     #3x3 Hill Cipher
     message = "AC.T"

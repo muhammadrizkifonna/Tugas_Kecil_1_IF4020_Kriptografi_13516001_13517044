@@ -63,6 +63,11 @@ def printWrapFiveCharacters(message):
         print(i, end=' ')
     print()
 
+def write_to_file(path, text):
+    file1 = open(path,"w+") 
+    file1.write(text) 
+    file1.close()
+
 if __name__ == "__main__": 
     listOfBytes = []
     with open("videoplayback.mp4", "rb") as f:
