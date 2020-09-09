@@ -41,9 +41,9 @@ def encryptTextExtendedVigenere(plaintext, key):
     for i in range(len(plaintext)):
         keyIndex = keyIndex % keylength
         shift = ord(key[keyIndex]) - 65
-        result[i] = [(ord(plaintext[i]) + shift) % 256]
+        result[i] = chr((ord(plaintext[i]) + shift) % 256)
         keyIndex+=1
-    return result
+    return ''.join(i for i in result)
 
 def decryptTextExtendedVigenere(cipherText, key):
     result = [[0] for i in range(len(cipherText))]
@@ -53,9 +53,9 @@ def decryptTextExtendedVigenere(cipherText, key):
     for i in range(len(cipherText)):
         keyIndex = keyIndex % keylength
         shift = ord(key[keyIndex]) - 65
-        result[i] = [(ord(cipherText[i]) + 256 - shift) % 256]
+        result[i] = chr((ord(cipherText[i]) + 256 - shift) % 256)
         keyIndex+=1
-    return result
+    return ''.join(i for i in result)
 
 def printWrapFiveCharacters(message):
     messageWrapFive = wrap(message,5)
