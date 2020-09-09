@@ -2,6 +2,7 @@ import PySimpleGUI as sg
 import vigenere as vg
 import full_vigenere as fvg
 import autokey_vigenere as avg
+import affine as af
 import vigenereExtended as vge
 import enigma as e
 import playfair as p
@@ -23,15 +24,26 @@ layout = [[sg.Text('Cipher method')],
             [sg.Text('Encryption')], 
             [sg.Text('Enter Plaintext:'), sg.Input(key='-PLAINTEXT_ENCRYPT-')], 
             [sg.Text('Enter key:'), sg.Input(key='-KEY_ENCRYPT-')],
+<<<<<<< HEAD
+            [sg.Text('Enter m key (for Affine):'), sg.Input(key='-KEY_ENCRYPT_M-')],
+            [sg.Text('Enter b key (for Affine):'), sg.Input(key='-KEY_ENCRYPT_B-')],
+            [sg.Text('Enter Filename (Path):'), sg.Input(key='-PATH_ENCRYPT-')],
+=======
             [sg.Text('Enter Input Filename (Path):'), sg.Input(key='-PATH_SOURCE_ENCRYPT-')],
             [sg.Text('Enter Output Filename (Path):'), sg.Input(key='-PATH_ENCRYPT-')],
+>>>>>>> 8bf99f070b85d7a930f4e3cd61e93ef1e09bff40
             [sg.Text('Ciphertext:'), sg.Text(size=(30,1), key='-CIPHERTEXT_ENCRYPT-')],
             [sg.Button('Encrypt'), sg.Button('Encrypt Text File'), sg.Button('Encrypt File, Output File'), sg.Button('Encrypt from Text File, Output into Text File'), sg.Button("Encrypt Output into Text File"), sg.Button('Exit')],
             [sg.Text('Decryption')],
             [sg.Text('Enter Ciphertext:'), sg.Input(key='-CIPHERTEXT_DECRYPT-')],
             [sg.Text('Enter key:'), sg.Input(key='-KEY_DECRYPT-')],
+<<<<<<< HEAD
+            [sg.Text('Enter m key (for Affine):'), sg.Input(key='-KEY_DECRYPT_M-')],
+            [sg.Text('Enter b key (for Affine):'), sg.Input(key='-KEY_DECRYPT_B-')],
+=======
             [sg.Text('Enter Input Filename (Path):'), sg.Input(key='-PATH_SOURCE_DECRYPT-')],
             [sg.Text('Enter Output Filename (Path):'), sg.Input(key='-PATH_DECRYPT-')],
+>>>>>>> 8bf99f070b85d7a930f4e3cd61e93ef1e09bff40
             [sg.Text('Plaintext:'), sg.Text(size=(30,1), key='-PLAINTEXT_DECRYPT-')],
             [sg.Button('Decrypt'), sg.Button('Decrypt Text File'), sg.Button('Decrypt File, Output File'), sg.Button('Decrypt from Text File, Output into Text File'), sg.Button("Decrypt Output into Text File"), sg.Button('Exit')]]
             
@@ -60,7 +72,7 @@ while True:
         if values['SuperEncryption'] == True:
             pass
         if values['Affine'] == True:
-            pass
+            window['-CIPHERTEXT_ENCRYPT-'].update(af.encryption(values['-PLAINTEXT_ENCRYPT-'], values['-KEY_ENCRYPT_M-'], values['-KEY_ENCRYPT_B-'], False, '', False))
         if values['Hill'] == True:
             message = values['-PLAINTEXT_ENCRYPT-']
             key = values['-KEY_ENCRYPT-']
@@ -492,7 +504,7 @@ while True:
         if values['SuperEncryption'] == True:
             pass
         if values['Affine'] == True:
-            pass
+            window['-PLAINTEXT_DECRYPT-'].update(af.decryption(values['-CIPHERTEXT_DECRYPT-'], values['-KEY_DECRYPT_M-'], values['-KEY_DECRYPT_B-']))
         if values['Hill'] == True:
             pass
         if values['Enigma'] == True:
