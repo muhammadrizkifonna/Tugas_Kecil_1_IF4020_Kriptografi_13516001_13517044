@@ -1,6 +1,7 @@
 import PySimpleGUI as sg
 import vigenere as vg
 import full_vigenere as fvg
+import autokey_vigenere as avg
 import vigenereExtended as vge
 import enigma as e
 import playfair as p
@@ -44,7 +45,7 @@ while True:
         if values['FullVignere'] == True:
             window['-CIPHERTEXT_ENCRYPT-'].update(fvg.encryption(values['-PLAINTEXT_ENCRYPT-'], values['-KEY_ENCRYPT-'], False, '', False))
         if values['RunningKeyVignere'] == True:
-            pass
+            window['-CIPHERTEXT_ENCRYPT-'].update(avg.encryption(values['-PLAINTEXT_ENCRYPT-'], values['-KEY_ENCRYPT-'], False, '', False))
         if values['ExtendedVignere'] == True:
             message = values['-PLAINTEXT_ENCRYPT-']
             key = values['-KEY_ENCRYPT-']
@@ -216,7 +217,7 @@ while True:
             #window['-CIPHERTEXT_ENCRYPT-'].update(fvg.encryption(values['-PLAINTEXT_ENCRYPT-'], values['-KEY_ENCRYPT-'], False, '', False))
             window['-PLAINTEXT_DECRYPT-'].update(fvg.decryption(values['-CIPHERTEXT_DECRYPT-'], values['-KEY_DECRYPT-']))
         if values['RunningKeyVignere'] == True:
-            pass
+            window['-PLAINTEXT_DECRYPT-'].update(avg.decryption(values['-CIPHERTEXT_DECRYPT-'], values['-KEY_DECRYPT-']))
         if values['ExtendedVignere'] == True:
             message = values['-CIPHERTEXT_DECRYPT-']
             key = values['-KEY_DECRYPT-']
