@@ -41,9 +41,9 @@ def encryptTextExtendedVigenere(plaintext, key):
     for i in range(len(plaintext)):
         keyIndex = keyIndex % keylength
         shift = ord(key[keyIndex]) - 65
-        result[i] = [(ord(plaintext[i]) + shift) % 256]
+        result[i] = chr((ord(plaintext[i]) + shift) % 256)
         keyIndex+=1
-    return result
+    return ''.join(i for i in result)
 
 def decryptTextExtendedVigenere(cipherText, key):
     result = [[0] for i in range(len(cipherText))]
@@ -53,15 +53,26 @@ def decryptTextExtendedVigenere(cipherText, key):
     for i in range(len(cipherText)):
         keyIndex = keyIndex % keylength
         shift = ord(key[keyIndex]) - 65
-        result[i] = [(ord(cipherText[i]) + 256 - shift) % 256]
+        result[i] = chr((ord(cipherText[i]) + 256 - shift) % 256)
         keyIndex+=1
-    return result
+    return ''.join(i for i in result)
 
 def printWrapFiveCharacters(message):
     messageWrapFive = wrap(message,5)
     for i in messageWrapFive:
         print(i, end=' ')
     print()
+
+def write_to_file(path, text):
+    file1 = open(path,"w+") 
+    file1.write(text) 
+    file1.close()
+
+def readTextFromFile(path):
+    file1 = open(path, "r")
+    data = file1.read()
+    file1.close()
+    return data
 
 if __name__ == "__main__": 
     listOfBytes = []

@@ -122,9 +122,24 @@ def printWrapFiveCharacters(message):
         print(i, end=' ')
     print()
 
+def toUpperCase(text):
+    return "".join(filter(str.isupper, text.upper()))
+
+def write_to_file(path, text):
+    file1 = open(path,"w+") 
+    file1.write(text) 
+    file1.close()
+
+def readTextFromFile(path):
+    file1 = open(path, "r")
+    data = file1.read()
+    file1.close()
+    return data
+
 def main(): 
     #3x3 Hill Cipher
-    message = "ACT"
+    message = "AC.T"
+    message = toUpperCase(message)
     message = wrap(message, 3)
     key = "GYBNQKURP"
 
@@ -153,11 +168,14 @@ def main():
                 messagePart = ''.join([messagePart, 'X']) 
         print(messagePart)
         cipherText = HillCipherEncryption(messagePart, key)
-        decipherText = HillCipherDecryption(messagePart, key)
+        print(cipherText)
+        decipherText = HillCipherDecryption(cipherText, key)
+        print(decipherText)
         if add > 0:
             for i in range(add):
-                message = message[:-1]
-        #print("Ciphertext: ", message) 
+                messagePart = messagePart[:-1]
+        print("Ciphertext: ", cipherText) 
+        print("Deciphertext: ", decipherText)
 
 if __name__ == "__main__": 
     main() 

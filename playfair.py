@@ -85,16 +85,27 @@ def printWrapFiveCharacters(message):
         print(i, end=' ')
     print()
  
+def write_to_file(path, text):
+    file1 = open(path,"w+") 
+    file1.write(text) 
+    file1.close()
+
+def readTextFromFile(path):
+    file1 = open(path, "r")
+    data = file1.read()
+    file1.close()
+    return data
 
 def main():
-    orig = "Hide the gold in... the TREESTUMP!!!"
+    # orig = "Hide the gold in... the TREESTUMP!!!"
     key = "Playfair example"
-    encrypted = toUpperCase(playfairEncrypt(orig, key))
-    printWrapFiveCharacters(encrypted)
+    # encrypted = toUpperCase(playfairEncrypt(orig, key))
+    # print(encrypted)
+    #printWrapFiveCharacters(encrypted)
     enc = "BMODZBXDNABEKUDMUIXMMOUVIF"
     decrypted = toUpperCase(playfairDecrypt(enc, key))
-    #print(decrypted)
-    printWrapFiveCharacters(decrypted)
+    print(decrypted)
+    #printWrapFiveCharacters(decrypted)
 
 if __name__ == "__main__":
     main()
