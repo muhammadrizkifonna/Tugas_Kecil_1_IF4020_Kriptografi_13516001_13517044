@@ -69,37 +69,37 @@ def wrapFiveCharacters(message):
 def toUpperCase(text):
     return "".join(filter(str.isupper, text.upper()))
 
-def main():
-    alphabet= "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    alphabetList = list(alphabet)
+# def main():
+#     alphabet= "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+#     alphabetList = list(alphabet)
 
-    #text = input("Input text: ")
-    # text = 'iwzqz jx kl kxvz'
-    text = 'i'
-    # steckerbrettDictionary = {' ': ' '}
-    steckerbrettDictionary = {"B":'A', ' ':' ', 'E':'Z'}
-    # pairsInSteckerBrett = input("Input the number of pairs in steckerbrett: ")
-    # for i in range(int(pairsInSteckerBrett)):
-    #     print("Pair #" + str(i+1))
-    #     firstSteckerbrettAlphabet = input("Input the first alphabet in pair: ")
-    #     secondSteckerbrettAlphabet = input("Input the second alphabet in pair: ")
-    #     steckerbrettDictionary[firstSteckerbrettAlphabet.upper()] = secondSteckerbrettAlphabet.upper()
-    # print("Input alpha, beta and gamma rotors")
-    # alphaRotor = int(input("Alpha Rotor = "))
-    # betaRotor = int(input("Beta Rotor = "))
-    # gammaRotor = int(input("Gamma Rotor = "))
-    alphaRotor = 3
-    betaRotor = 17
-    gammaRotor = 24
-    for letter in list(steckerbrettDictionary.keys()):
-        if letter in alphabetList:
-            alphabetList.remove(letter)
-            alphabetList.remove(steckerbrettDictionary[letter])
-            steckerbrettDictionary.update({steckerbrettDictionary[letter]:letter})
-    print(steckerbrettDictionary)
-    reflector = [letter for letter in reversed(alphabetList)]
+#     #text = input("Input text: ")
+#     text = 'iwzqz jx kl kxvz'
+#     #text = 'i'
+#     # steckerbrettDictionary = {' ': ' '}
+#     steckerbrettDictionary = {"B":'A', ' ':' ', 'E':'Z'}
+#     # pairsInSteckerBrett = input("Input the number of pairs in steckerbrett: ")
+#     # for i in range(int(pairsInSteckerBrett)):
+#     #     print("Pair #" + str(i+1))
+#     #     firstSteckerbrettAlphabet = input("Input the first alphabet in pair: ")
+#     #     secondSteckerbrettAlphabet = input("Input the second alphabet in pair: ")
+#     #     steckerbrettDictionary[firstSteckerbrettAlphabet.upper()] = secondSteckerbrettAlphabet.upper()
+#     # print("Input alpha, beta and gamma rotors")
+#     # alphaRotor = int(input("Alpha Rotor = "))
+#     # betaRotor = int(input("Beta Rotor = "))
+#     # gammaRotor = int(input("Gamma Rotor = "))
+#     alphaRotor = 3
+#     betaRotor = 17
+#     gammaRotor = 24
+#     for letter in list(steckerbrettDictionary.keys()):
+#         if letter in alphabetList:
+#             alphabetList.remove(letter)
+#             alphabetList.remove(steckerbrettDictionary[letter])
+#             steckerbrettDictionary.update({steckerbrettDictionary[letter]:letter})
+#     print(steckerbrettDictionary)
+#     reflector = [letter for letter in reversed(alphabetList)]
 
-    print(encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, reflector, alphabetList))
+#     print(encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, reflector, alphabetList))
 
-if __name__ == "__main__": 
-    main() 
+# if __name__ == "__main__": 
+#     main() 
