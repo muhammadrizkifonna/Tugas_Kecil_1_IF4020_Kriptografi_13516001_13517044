@@ -118,7 +118,7 @@ def HillCipherDecryption(message, key):
 
 def wrapFiveCharacters(message):
     messageWrapFive = wrap(message,5)
-    return '-'.join(messageWrapFive)
+    return ' '.join(messageWrapFive)
 
 def toUpperCase(text):
     return "".join(filter(str.isupper, text.upper()))
@@ -133,6 +133,35 @@ def readTextFromFile(path):
     data = file1.read()
     file1.close()
     return data
+
+def generateHillResultMessage(message, key, encrypt):
+    resultList = []
+    message = toUpperCase(message)
+    message = wrap(message, 3)
+    if (len(key)<9):
+        real_key=key
+        times = 9//len(key)
+        for i in range(times-1):
+            key+=real_key
+        sisa = 9-len(key)
+        for i in range(sisa):
+            key+=real_key[i]
+    #If key>plaintext#
+    elif (len(key)>9):
+        key=key[:9]
+    for messagePart in message:
+        add = 0
+        if len(messagePart) < 3:
+            add = 3 - len(messagePart) 
+            for i in range(add):
+                messagePart = ''.join([messagePart, 'X'])
+        if encrypt:
+            cipherText = HillCipherEncryption(messagePart, key)
+            resultList.append(cipherText)
+        else:
+            decipherText = HillCipherDecryption(messagePart, key)
+            resultList.append(decipherText)
+    return ''.join(resultList)
 
 def main(): 
     #3x3 Hill Cipher

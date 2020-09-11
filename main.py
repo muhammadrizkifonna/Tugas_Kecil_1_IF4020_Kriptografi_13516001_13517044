@@ -43,6 +43,21 @@ layout = [[sg.Text('Cipher method')],
 
 window = sg.Window('Cryptography Program', layout)
 
+def enigmaEncryptDecryptInit():
+    alphabet= "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    alphabetList = list(alphabet)
+    steckerbrettDictionary = {' ': ' '}
+    pairsInSteckerbrett = sg.popup_get_text('Input the number of pairs in steckerbrett (min 0)', 'Input the number of pairs in steckerbrett')
+    for i in range(int(pairsInSteckerbrett)):
+        firstSteckerbrettAlphabet = sg.popup_get_text("Pair #" + str(i+1),"Input the first alphabet in pair: ")
+        secondSteckerbrettAlphabet = sg.popup_get_text("Pair #" + str(i+1), "Input the second alphabet in pair: ")
+        steckerbrettDictionary[firstSteckerbrettAlphabet.upper()] = secondSteckerbrettAlphabet.upper()
+    #print("Input alpha, beta and gamma rotor s")
+    alphaRotor = int(sg.popup_get_text("Input Alpha Rotor shift (0-25)", "Input Alpha Rotor shift (0-25)"))
+    betaRotor = int(sg.popup_get_text("Input Beta Rotor shift (0-25)", "Input Beta Rotor shift (0-25)"))
+    gammaRotor = int(sg.popup_get_text("Input Gamma Rotor shift (0-25)", "Input Gamma Rotor shift (0-25)"))
+    return alphabetList, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor
+
 while True:
     event, values = window.read()
     if event is None or event == 'Exit':
@@ -75,65 +90,19 @@ while True:
         if values['Hill'] == True:
             message = values['-PLAINTEXT_ENCRYPT-']
             key = values['-KEY_ENCRYPT-']
-            resultList = []
-            message = h.toUpperCase(message)
-            message = h.wrap(message, 3)
-            if (len(key)<9):
-                real_key=key
-                times = 9//len(key)
-
-                for i in range(times-1):
-                    key+=real_key
-
-                sisa = 9-len(key)
-
-                for i in range(sisa):
-                    key+=real_key[i]
-
-            #If key>plaintext#
-            elif (len(key)>9):
-                key=key[:9]
-
-            for messagePart in message:
-                add = 0
-                if len(messagePart) < 3:
-                    add = 3 - len(messagePart) 
-                    for i in range(add):
-                        messagePart = ''.join([messagePart, 'X'])
-                cipherText = h.HillCipherEncryption(messagePart, key)
-                # if add > 0:
-                #     for i in range(add):
-                #         cipherText = cipherText[:-1]
-                resultList.append(cipherText)
-            resultMessage = ''.join(resultList)
+            resultMessage = h.generateHillResultMessage(message, key, encrypt = True)
             if values['FiveChar'] == True:
                 window['-CIPHERTEXT_ENCRYPT-'].update(h.wrapFiveCharacters(resultMessage))
             else:
                 window['-CIPHERTEXT_ENCRYPT-'].update(resultMessage)
         if values['Enigma'] == True:
             text = values['-PLAINTEXT_ENCRYPT-']
-            alphabet= "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-            alphabetList = list(alphabet)
-            steckerbrettDictionary = {' ': ' '}
-            pairsInSteckerbrett = sg.popup_get_text('Input the number of pairs in steckerbrett (min 0)', 'Input the number of pairs in steckerbrett')
-            for i in range(int(pairsInSteckerbrett)):
-                firstSteckerbrettAlphabet = sg.popup_get_text("Pair #" + str(i+1),"Input the first alphabet in pair: ")
-                secondSteckerbrettAlphabet = sg.popup_get_text("Pair #" + str(i+1), "Input the second alphabet in pair: ")
-                steckerbrettDictionary[firstSteckerbrettAlphabet.upper()] = secondSteckerbrettAlphabet.upper()
-            #print("Input alpha, beta and gamma rotor s")
-            alphaRotor = int(sg.popup_get_text("Input Alpha Rotor shift (0-25)", "Input Alpha Rotor shift (0-25)"))
-            betaRotor = int(sg.popup_get_text("Input Beta Rotor shift (0-25)", "Input Beta Rotor shift (0-25)"))
-            gammaRotor = int(sg.popup_get_text("Input Gamma Rotor shift (0-25)", "Input Gamma Rotor shift (0-25)"))
-            for letter in list(steckerbrettDictionary.keys()):
-                if letter in alphabetList:
-                    alphabetList.remove(letter)
-                    alphabetList.remove(steckerbrettDictionary[letter])
-                    steckerbrettDictionary.update({steckerbrettDictionary[letter]:letter})
-            reflector = [letter for letter in reversed(alphabetList)]
+            alphabetList, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor = enigmaEncryptDecryptInit()
+            print("gammaRotor = ", gammaRotor)
             if values['FiveChar'] == True:
-                window['-CIPHERTEXT_ENCRYPT-'].update(e.wrapFiveCharacters(e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList, reflector)))
+                window['-CIPHERTEXT_ENCRYPT-'].update(e.wrapFiveCharacters(e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList)))
             else:
-                window['-CIPHERTEXT_ENCRYPT-'].update(e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList, reflector))
+                window['-CIPHERTEXT_ENCRYPT-'].update(e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList))
     elif event=='Encrypt Text File':
         if values['vignere'] == True:
             window['-CIPHERTEXT_ENCRYPT-'].update(vg.encryption('', values['-KEY_ENCRYPT-'], True, values['-PATH_ENCRYPT-']))
@@ -162,66 +131,18 @@ while True:
         if values['Hill'] == True:
             message = e.readTextFromFile(values['-PATH_SOURCE_ENCRYPT-'])
             key = values['-KEY_ENCRYPT-']
-            resultList = []
-            message = h.toUpperCase(message)
-            message = h.wrap(message, 3)
-            if (len(key)<9):
-                real_key=key
-                times = 9//len(key)
-
-                for i in range(times-1):
-                    key+=real_key
-
-                sisa = 9-len(key)
-
-                for i in range(sisa):
-                    key+=real_key[i]
-
-            #If key>plaintext#
-            elif (len(key)>9):
-                key=key[:9]
-
-            for messagePart in message:
-                add = 0
-                if len(messagePart) < 3:
-                    add = 3 - len(messagePart) 
-                    for i in range(add):
-                        messagePart = ''.join([messagePart, 'X'])
-                cipherText = h.HillCipherEncryption(messagePart, key)
-                # if add > 0:
-                #     for i in range(add):
-                #         cipherText = cipherText[:-1]
-                resultList.append(cipherText)
-            
-            resultMessage = ''.join(resultList)
+            resultMessage = h.generateHillResultMessage(message, key, encrypt = True)
             if values['FiveChar'] == True:
                 window['-CIPHERTEXT_ENCRYPT-'].update(h.wrapFiveCharacters(resultMessage))
             else:
                 window['-CIPHERTEXT_ENCRYPT-'].update(resultMessage)
         if values['Enigma'] == True:
             text = e.readTextFromFile(values['-PATH_SOURCE_ENCRYPT-'])
-            alphabet= "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-            alphabetList = list(alphabet)
-            steckerbrettDictionary = {' ': ' '}
-            pairsInSteckerbrett = sg.popup_get_text('Input the number of pairs in steckerbrett (min 0)', 'Input the number of pairs in steckerbrett')
-            for i in range(int(pairsInSteckerbrett)):
-                firstSteckerbrettAlphabet = sg.popup_get_text("Pair #" + str(i+1),"Input the first alphabet in pair: ")
-                secondSteckerbrettAlphabet = sg.popup_get_text("Pair #" + str(i+1), "Input the second alphabet in pair: ")
-                steckerbrettDictionary[firstSteckerbrettAlphabet.upper()] = secondSteckerbrettAlphabet.upper()
-            #print("Input alpha, beta and gamma rotor s")
-            alphaRotor = int(sg.popup_get_text("Input Alpha Rotor shift (0-25)", "Input Alpha Rotor shift (0-25)"))
-            betaRotor = int(sg.popup_get_text("Input Beta Rotor shift (0-25)", "Input Beta Rotor shift (0-25)"))
-            gammaRotor = int(sg.popup_get_text("Input Gamma Rotor shift (0-25)", "Input Gamma Rotor shift (0-25)"))
-            for letter in list(steckerbrettDictionary.keys()):
-                if letter in alphabetList:
-                    alphabetList.remove(letter)
-                    alphabetList.remove(steckerbrettDictionary[letter])
-                    steckerbrettDictionary.update({steckerbrettDictionary[letter]:letter})
-            reflector = [letter for letter in reversed(alphabetList)]
+            alphabetList, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor = enigmaEncryptDecryptInit()
             if values['FiveChar'] == True:
-                window['-CIPHERTEXT_ENCRYPT-'].update(e.wrapFiveCharacters(e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList, reflector)))
+                window['-CIPHERTEXT_ENCRYPT-'].update(e.wrapFiveCharacters(e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList)))
             else:
-                window['-CIPHERTEXT_ENCRYPT-'].update(e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList, reflector))
+                window['-CIPHERTEXT_ENCRYPT-'].update(e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList))
     
     elif event=='Encrypt File, Output File':
         if values['ExtendedVignere'] == True:
@@ -266,65 +187,18 @@ while True:
         if values['Hill'] == True:
             message = e.readTextFromFile(values['-PATH_SOURCE_ENCRYPT-'])
             key = values['-KEY_ENCRYPT-']
-            resultList = []
-            message = h.toUpperCase(message)
-            message = h.wrap(message, 3)
-            if (len(key)<9):
-                real_key=key
-                times = 9//len(key)
-
-                for i in range(times-1):
-                    key+=real_key
-
-                sisa = 9-len(key)
-
-                for i in range(sisa):
-                    key+=real_key[i]
-
-            #If key>plaintext#
-            elif (len(key)>9):
-                key=key[:9]
-
-            for messagePart in message:
-                add = 0
-                if len(messagePart) < 3:
-                    add = 3 - len(messagePart) 
-                    for i in range(add):
-                        messagePart = ''.join([messagePart, 'X'])
-                cipherText = h.HillCipherEncryption(messagePart, key)
-                # if add > 0:
-                #     for i in range(add):
-                #         cipherText = cipherText[:-1]
-                resultList.append(cipherText)
-            resultMessage = ''.join(resultList)
+            resultMessage = h.generateHillResultMessage(message, key, encrypt = True)
             if values['FiveChar'] == True:
                 window['-CIPHERTEXT_ENCRYPT-'].update(h.write_to_file(values['-PATH_ENCRYPT-'], h.wrapFiveCharacters(resultMessage)))
             else:
                 window['-CIPHERTEXT_ENCRYPT-'].update(h.write_to_file(values['-PATH_ENCRYPT-'], resultMessage))
         if values['Enigma'] == True:
             text = e.readTextFromFile(values['-PATH_SOURCE_ENCRYPT-'])
-            alphabet= "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-            alphabetList = list(alphabet)
-            steckerbrettDictionary = {' ': ' '}
-            pairsInSteckerbrett = sg.popup_get_text('Input the number of pairs in steckerbrett (min 0)', 'Input the number of pairs in steckerbrett')
-            for i in range(int(pairsInSteckerbrett)):
-                firstSteckerbrettAlphabet = sg.popup_get_text("Pair #" + str(i+1),"Input the first alphabet in pair: ")
-                secondSteckerbrettAlphabet = sg.popup_get_text("Pair #" + str(i+1), "Input the second alphabet in pair: ")
-                steckerbrettDictionary[firstSteckerbrettAlphabet.upper()] = secondSteckerbrettAlphabet.upper()
-            #print("Input alpha, beta and gamma rotor s")
-            alphaRotor = int(sg.popup_get_text("Input Alpha Rotor shift (0-25)", "Input Alpha Rotor shift (0-25)"))
-            betaRotor = int(sg.popup_get_text("Input Beta Rotor shift (0-25)", "Input Beta Rotor shift (0-25)"))
-            gammaRotor = int(sg.popup_get_text("Input Gamma Rotor shift (0-25)", "Input Gamma Rotor shift (0-25)"))
-            for letter in list(steckerbrettDictionary.keys()):
-                if letter in alphabetList:
-                    alphabetList.remove(letter)
-                    alphabetList.remove(steckerbrettDictionary[letter])
-                    steckerbrettDictionary.update({steckerbrettDictionary[letter]:letter})
-            reflector = [letter for letter in reversed(alphabetList)]
+            alphabetList, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor = enigmaEncryptDecryptInit()
             if values['FiveChar'] == True:
-                window['-CIPHERTEXT_ENCRYPT-'].update(e.write_to_file(values['-PATH_ENCRYPT-'], e.wrapFiveCharacters(e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList, reflector))))
+                window['-CIPHERTEXT_ENCRYPT-'].update(e.write_to_file(values['-PATH_ENCRYPT-'], e.wrapFiveCharacters(e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList))))
             else:
-                window['-CIPHERTEXT_ENCRYPT-'].update(e.write_to_file(values['-PATH_ENCRYPT-'], e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList, reflector)))
+                window['-CIPHERTEXT_ENCRYPT-'].update(e.write_to_file(values['-PATH_ENCRYPT-'], e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList)))
 
     elif event=='Encrypt Output into Text File':
         if values['vignere'] == True:
@@ -354,65 +228,18 @@ while True:
         if values['Hill'] == True:
             message = values['-PLAINTEXT_ENCRYPT-']
             key = values['-KEY_ENCRYPT-']
-            resultList = []
-            message = h.toUpperCase(message)
-            message = h.wrap(message, 3)
-            if (len(key)<9):
-                real_key=key
-                times = 9//len(key)
-
-                for i in range(times-1):
-                    key+=real_key
-
-                sisa = 9-len(key)
-
-                for i in range(sisa):
-                    key+=real_key[i]
-
-            #If key>plaintext#
-            elif (len(key)>9):
-                key=key[:9]
-
-            for messagePart in message:
-                add = 0
-                if len(messagePart) < 3:
-                    add = 3 - len(messagePart) 
-                    for i in range(add):
-                        messagePart = ''.join([messagePart, 'X'])
-                cipherText = h.HillCipherEncryption(messagePart, key)
-                # if add > 0:
-                #     for i in range(add):
-                #         cipherText = cipherText[:-1]
-                resultList.append(cipherText)
-            resultMessage = ''.join(resultList)
+            resultMessage = h.generateHillResultMessage(message, key, encrypt = True)
             if values['FiveChar'] == True:
                 window['-CIPHERTEXT_ENCRYPT-'].update(h.write_to_file(values['-PATH_ENCRYPT-'], h.wrapFiveCharacters(resultMessage)))
             else:
                 window['-CIPHERTEXT_ENCRYPT-'].update(h.write_to_file(values['-PATH_ENCRYPT-'], resultMessage))
         if values['Enigma'] == True:
             text = values['-PLAINTEXT_ENCRYPT-']
-            alphabet= "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-            alphabetList = list(alphabet)
-            steckerbrettDictionary = {' ': ' '}
-            pairsInSteckerbrett = sg.popup_get_text('Input the number of pairs in steckerbrett (min 0)', 'Input the number of pairs in steckerbrett')
-            for i in range(int(pairsInSteckerbrett)):
-                firstSteckerbrettAlphabet = sg.popup_get_text("Pair #" + str(i+1),"Input the first alphabet in pair: ")
-                secondSteckerbrettAlphabet = sg.popup_get_text("Pair #" + str(i+1), "Input the second alphabet in pair: ")
-                steckerbrettDictionary[firstSteckerbrettAlphabet.upper()] = secondSteckerbrettAlphabet.upper()
-            #print("Input alpha, beta and gamma rotor s")
-            alphaRotor = int(sg.popup_get_text("Input Alpha Rotor shift (0-25)", "Input Alpha Rotor shift (0-25)"))
-            betaRotor = int(sg.popup_get_text("Input Beta Rotor shift (0-25)", "Input Beta Rotor shift (0-25)"))
-            gammaRotor = int(sg.popup_get_text("Input Gamma Rotor shift (0-25)", "Input Gamma Rotor shift (0-25)"))
-            for letter in list(steckerbrettDictionary.keys()):
-                if letter in alphabetList:
-                    alphabetList.remove(letter)
-                    alphabetList.remove(steckerbrettDictionary[letter])
-                    steckerbrettDictionary.update({steckerbrettDictionary[letter]:letter})
-            reflector = [letter for letter in reversed(alphabetList)]
+            alphabetList, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor = enigmaEncryptDecryptInit()
             if values['FiveChar'] == True:
-                window['-CIPHERTEXT_ENCRYPT-'].update(e.write_to_file(values['-PATH_ENCRYPT-'], e.wrapFiveCharacters(e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList, reflector))))
+                window['-CIPHERTEXT_ENCRYPT-'].update(e.write_to_file(values['-PATH_ENCRYPT-'], e.wrapFiveCharacters(e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList))))
             else:
-                window['-CIPHERTEXT_ENCRYPT-'].update(e.write_to_file(values['-PATH_ENCRYPT-'], e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList, reflector)))
+                window['-CIPHERTEXT_ENCRYPT-'].update(e.write_to_file(values['-PATH_ENCRYPT-'], e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList)))
     elif event=='Decrypt':
         if values['vignere'] == True:
             window['-PLAINTEXT_DECRYPT-'].update(vg.decryption(values['-CIPHERTEXT_DECRYPT-'], values['-KEY_DECRYPT-']))
@@ -424,11 +251,17 @@ while True:
         if values['ExtendedVignere'] == True:
             message = values['-CIPHERTEXT_DECRYPT-']
             key = values['-KEY_DECRYPT-']
-            window['-PLAINTEXT_DECRYPT-'].update(vge.decryptTextExtendedVigenere(message, key))
+            if values['FiveChar'] == True:
+                window['-PLAINTEXT_DECRYPT-'].update(vge.wrapFiveCharacters(vge.decryptTextExtendedVigenere(message, key)))
+            else:
+                window['-PLAINTEXT_DECRYPT-'].update(vge.decryptTextExtendedVigenere(message, key))
         if values['Playfair'] == True:
             message = values['-CIPHERTEXT_DECRYPT-']
             key = values['-KEY_DECRYPT-']
-            window['-PLAINTEXT_DECRYPT-'].update(p.toUpperCase(p.playfairDecrypt(message, key)))
+            if values['FiveChar'] == True:
+                window['-PLAINTEXT_DECRYPT-'].update(p.wrapFiveCharacters(p.toUpperCase(p.playfairDecrypt(message, key))))
+            else:
+                window['-PLAINTEXT_DECRYPT-'].update(p.toUpperCase(p.playfairDecrypt(message, key)))
         if values['SuperEncryption'] == True:
             pass
         if values['Affine'] == True:
@@ -436,59 +269,18 @@ while True:
         if values['Hill'] == True:
             message = values['-CIPHERTEXT_DECRYPT-']
             key = values['-KEY_DECRYPT-']
-            resultList = []
-            message = h.toUpperCase(message)
-            message = h.wrap(message, 3)
-            if (len(key)<9):
-                real_key=key
-                times = 9//len(key)
-
-                for i in range(times-1):
-                    key+=real_key
-
-                sisa = 9-len(key)
-
-                for i in range(sisa):
-                    key+=real_key[i]
-
-            #If key>plaintext#
-            elif (len(key)>9):
-                key=key[:9]
-
-            for messagePart in message:
-                # add = 0
-                # if len(messagePart) < 3:
-                #     add = 3 - len(messagePart) 
-                #     for i in range(add):
-                #         messagePart = ''.join([messagePart, 'X'])
-                decipherText = h.HillCipherDecryption(messagePart, key)
-                # if add > 0:
-                #     for i in range(add):
-                #         decipherText = decipherText[:-1]
-                resultList.append(decipherText)
-            resultMessage = ''.join(resultList)
-            window['-PLAINTEXT_DECRYPT-'].update(resultMessage)
+            resultMessage = h.generateHillResultMessage(message, key, encrypt = False)
+            if values['FiveChar'] == True:
+                window['-PLAINTEXT_DECRYPT-'].update(h.wrapFiveCharacters(resultMessage))
+            else:
+                window['-PLAINTEXT_DECRYPT-'].update(resultMessage)
         if values['Enigma'] == True:
             text = values['-CIPHERTEXT_DECRYPT-']
-            alphabet= "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-            alphabetList = list(alphabet)
-            steckerbrettDictionary = {' ': ' '}
-            pairsInSteckerbrett = sg.popup_get_text('Input the number of pairs in steckerbrett (min 0)', 'Input the number of pairs in steckerbrett')
-            for i in range(int(pairsInSteckerbrett)):
-                firstSteckerbrettAlphabet = sg.popup_get_text("Pair #" + str(i+1),"Input the first alphabet in pair: ")
-                secondSteckerbrettAlphabet = sg.popup_get_text("Pair #" + str(i+1), "Input the second alphabet in pair: ")
-                steckerbrettDictionary[firstSteckerbrettAlphabet.upper()] = secondSteckerbrettAlphabet.upper()
-            #print("Input alpha, beta and gamma rotor s")
-            alphaRotor = int(sg.popup_get_text("Input Alpha Rotor shift (0-25)", "Input Alpha Rotor shift (0-25)"))
-            betaRotor = int(sg.popup_get_text("Input Beta Rotor shift (0-25)", "Input Beta Rotor shift (0-25)"))
-            gammaRotor = int(sg.popup_get_text("Input Gamma Rotor shift (0-25)", "Input Gamma Rotor shift (0-25)"))
-            for letter in list(steckerbrettDictionary.keys()):
-                if letter in alphabetList:
-                    alphabetList.remove(letter)
-                    alphabetList.remove(steckerbrettDictionary[letter])
-                    steckerbrettDictionary.update({steckerbrettDictionary[letter]:letter})
-            reflector = [letter for letter in reversed(alphabetList)]
-            window['-PLAINTEXT_DECRYPT-'].update(e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList, reflector))
+            alphabetList, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor = enigmaEncryptDecryptInit()
+            if values['FiveChar'] == True:
+                window['-PLAINTEXT_DECRYPT-'].update(e.wrapFiveCharacters(e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList)))
+            else:
+                window['-PLAINTEXT_DECRYPT-'].update(e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList))
     
     elif event=='Decrypt Text File':
         if values['vignere'] == True:
@@ -518,69 +310,23 @@ while True:
         if values['Hill'] == True:
             message = e.readTextFromFile(values['-PATH_SOURCE_DECRYPT-'])
             key = values['-KEY_DECRYPT-']
-            resultList = []
-            message = h.toUpperCase(message)
-            message = h.wrap(message, 3)
-            if (len(key)<9):
-                real_key=key
-                times = 9//len(key)
-
-                for i in range(times-1):
-                    key+=real_key
-
-                sisa = 9-len(key)
-
-                for i in range(sisa):
-                    key+=real_key[i]
-
-            #If key>plaintext#
-            elif (len(key)>9):
-                key=key[:9]
-
-            for messagePart in message:
-                #add = 0
-                # if len(messagePart) < 3:
-                #     add = 3 - len(messagePart) 
-                #     for i in range(add):
-                #         messagePart = ''.join([messagePart, 'X'])
-                cipherText = h.HillCipherDecryption(messagePart, key)
-                # if add > 0:
-                #     for i in range(add):
-                #         cipherText = cipherText[:-1]
-                resultList.append(cipherText)
-            
-            resultMessage = ''.join(resultList)
+            resultMessage = h.generateHillResultMessage(message, key, encrypt = False)
             if values['FiveChar'] == True:
                 window['-PLAINTEXT_DECRYPT-'].update(h.wrapFiveCharacters(resultMessage))
             else:
                 window['-PLAINTEXT_DECRYPT-'].update(resultMessage)
         if values['Enigma'] == True:
             text = e.readTextFromFile(values['-PATH_SOURCE_DECRYPT-'])
-            alphabet= "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-            alphabetList = list(alphabet)
-            steckerbrettDictionary = {' ': ' '}
-            pairsInSteckerbrett = sg.popup_get_text('Input the number of pairs in steckerbrett (min 0)', 'Input the number of pairs in steckerbrett')
-            for i in range(int(pairsInSteckerbrett)):
-                firstSteckerbrettAlphabet = sg.popup_get_text("Pair #" + str(i+1),"Input the first alphabet in pair: ")
-                secondSteckerbrettAlphabet = sg.popup_get_text("Pair #" + str(i+1), "Input the second alphabet in pair: ")
-                steckerbrettDictionary[firstSteckerbrettAlphabet.upper()] = secondSteckerbrettAlphabet.upper()
-            #print("Input alpha, beta and gamma rotor s")
-            alphaRotor = int(sg.popup_get_text("Input Alpha Rotor shift (0-25)", "Input Alpha Rotor shift (0-25)"))
-            betaRotor = int(sg.popup_get_text("Input Beta Rotor shift (0-25)", "Input Beta Rotor shift (0-25)"))
-            gammaRotor = int(sg.popup_get_text("Input Gamma Rotor shift (0-25)", "Input Gamma Rotor shift (0-25)"))
-            for letter in list(steckerbrettDictionary.keys()):
-                if letter in alphabetList:
-                    alphabetList.remove(letter)
-                    alphabetList.remove(steckerbrettDictionary[letter])
-                    steckerbrettDictionary.update({steckerbrettDictionary[letter]:letter})
-            reflector = [letter for letter in reversed(alphabetList)]
+            alphabetList, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor = enigmaEncryptDecryptInit()
             if values['FiveChar'] == True:
-                window['-PLAINTEXT_DECRYPT-'].update(e.wrapFiveCharacters(e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList, reflector)))
+                window['-PLAINTEXT_DECRYPT-'].update(e.wrapFiveCharacters(e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList)))
             else:
-                window['-PLAINTEXT_DECRYPT-'].update(e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList, reflector))
+                window['-PLAINTEXT_DECRYPT-'].update(e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList))
 
     elif event == 'Decrypt File, Output File':
+        print("hello")
         if values['ExtendedVignere'] == True:
+            print("hello")
             listOfBytes = []
             with open(values['-PATH_SOURCE_DECRYPT-'], "rb") as f:
                 while (byte := f.read(1)):
@@ -622,67 +368,19 @@ while True:
         if values['Hill'] == True:
             message = e.readTextFromFile(values['-PATH_SOURCE_DECRYPT-'])
             key = values['-KEY_DECRYPT-']
-            resultList = []
-            message = h.toUpperCase(message)
-            message = h.wrap(message, 3)
-            if (len(key)<9):
-                real_key=key
-                times = 9//len(key)
-
-                for i in range(times-1):
-                    key+=real_key
-
-                sisa = 9-len(key)
-
-                for i in range(sisa):
-                    key+=real_key[i]
-
-            #If key>plaintext#
-            elif (len(key)>9):
-                key=key[:9]
-
-            for messagePart in message:
-                add = 0
-                if len(messagePart) < 3:
-                    add = 3 - len(messagePart) 
-                    for i in range(add):
-                        messagePart = ''.join([messagePart, 'X'])
-                cipherText = h.HillCipherDecryption(messagePart, key)
-                # if add > 0:
-                #     for i in range(add):
-                #         cipherText = cipherText[:-1]
-                resultList.append(cipherText)
-            resultMessage = ''.join(resultList)
+            resultMessage = h.generateHillResultMessage(message, key, encrypt = False)
             if values['FiveChar'] == True:
                 window['-PLAINTEXT_DECRYPT-'].update(h.write_to_file(values['-PATH_DECRYPT-'], h.wrapFiveCharacters(resultMessage)))
             else:
                 window['-PLAINTEXT_DECRYPT-'].update(h.write_to_file(values['-PATH_DECRYPT-'], resultMessage))
         if values['Enigma'] == True:
             text = e.readTextFromFile(values['-PATH_SOURCE_DECRYPT-'])
-            alphabet= "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-            alphabetList = list(alphabet)
-            steckerbrettDictionary = {' ': ' '}
-            pairsInSteckerbrett = sg.popup_get_text('Input the number of pairs in steckerbrett (min 0)', 'Input the number of pairs in steckerbrett')
-            for i in range(int(pairsInSteckerbrett)):
-                firstSteckerbrettAlphabet = sg.popup_get_text("Pair #" + str(i+1),"Input the first alphabet in pair: ")
-                secondSteckerbrettAlphabet = sg.popup_get_text("Pair #" + str(i+1), "Input the second alphabet in pair: ")
-                steckerbrettDictionary[firstSteckerbrettAlphabet.upper()] = secondSteckerbrettAlphabet.upper()
-            #print("Input alpha, beta and gamma rotor s")
-            alphaRotor = int(sg.popup_get_text("Input Alpha Rotor shift (0-25)", "Input Alpha Rotor shift (0-25)"))
-            betaRotor = int(sg.popup_get_text("Input Beta Rotor shift (0-25)", "Input Beta Rotor shift (0-25)"))
-            gammaRotor = int(sg.popup_get_text("Input Gamma Rotor shift (0-25)", "Input Gamma Rotor shift (0-25)"))
-            for letter in list(steckerbrettDictionary.keys()):
-                if letter in alphabetList:
-                    alphabetList.remove(letter)
-                    alphabetList.remove(steckerbrettDictionary[letter])
-                    steckerbrettDictionary.update({steckerbrettDictionary[letter]:letter})
-            reflector = [letter for letter in reversed(alphabetList)]
+            alphabetList, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor = enigmaEncryptDecryptInit()
             if values['FiveChar'] == True:
-                window['-PLAINTEXT_DECRYPT-'].update(e.write_to_file(values['-PATH_DECRYPT-'], e.wrapFiveCharacters(e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList, reflector))))
+                window['-PLAINTEXT_DECRYPT-'].update(e.write_to_file(values['-PATH_DECRYPT-'], e.wrapFiveCharacters(e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList))))
             else:
-                window['-PLAINTEXT_DECRYPT-'].update(e.write_to_file(values['-PATH_DECRYPT-'], e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList, reflector)))
+                window['-PLAINTEXT_DECRYPT-'].update(e.write_to_file(values['-PATH_DECRYPT-'], e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList)))
 
-        
     elif event=='Decrypt Output into Text File':
         if values['vignere'] == True:
             pass
@@ -711,64 +409,17 @@ while True:
         if values['Hill'] == True:
             message = values['-CIPHERTEXT_DECRYPT-']
             key = values['-KEY_DECRYPT-']
-            resultList = []
-            message = h.toUpperCase(message)
-            message = h.wrap(message, 3)
-            if (len(key)<9):
-                real_key=key
-                times = 9//len(key)
-
-                for i in range(times-1):
-                    key+=real_key
-
-                sisa = 9-len(key)
-
-                for i in range(sisa):
-                    key+=real_key[i]
-
-            #If key>plaintext#
-            elif (len(key)>9):
-                key=key[:9]
-
-            for messagePart in message:
-                add = 0
-                if len(messagePart) < 3:
-                    add = 3 - len(messagePart) 
-                    for i in range(add):
-                        messagePart = ''.join([messagePart, 'X'])
-                cipherText = h.HillCipherDecryption(messagePart, key)
-                # if add > 0:
-                #     for i in range(add):
-                #         cipherText = cipherText[:-1]
-                resultList.append(cipherText)
-            resultMessage = ''.join(resultList)
+            resultMessage = h.generateHillResultMessage(message, key, encrypt = False)
             if values['FiveChar'] == True:
                 window['-PLAINTEXT_DECRYPT-'].update(h.write_to_file(values['-PATH_DECRYPT-'], h.wrapFiveCharacters(resultMessage)))
             else:
                 window['-PLAINTEXT_DECRYPT-'].update(h.write_to_file(values['-PATH_DECRYPT-'], resultMessage))
         if values['Enigma'] == True:
             text = values['-CIPHERTEXT_DECRYPT-']
-            alphabet= "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-            alphabetList = list(alphabet)
-            steckerbrettDictionary = {' ': ' '}
-            pairsInSteckerbrett = sg.popup_get_text('Input the number of pairs in steckerbrett (min 0)', 'Input the number of pairs in steckerbrett')
-            for i in range(int(pairsInSteckerbrett)):
-                firstSteckerbrettAlphabet = sg.popup_get_text("Pair #" + str(i+1),"Input the first alphabet in pair: ")
-                secondSteckerbrettAlphabet = sg.popup_get_text("Pair #" + str(i+1), "Input the second alphabet in pair: ")
-                steckerbrettDictionary[firstSteckerbrettAlphabet.upper()] = secondSteckerbrettAlphabet.upper()
-            #print("Input alpha, beta and gamma rotor s")
-            alphaRotor = int(sg.popup_get_text("Input Alpha Rotor shift (0-25)", "Input Alpha Rotor shift (0-25)"))
-            betaRotor = int(sg.popup_get_text("Input Beta Rotor shift (0-25)", "Input Beta Rotor shift (0-25)"))
-            gammaRotor = int(sg.popup_get_text("Input Gamma Rotor shift (0-25)", "Input Gamma Rotor shift (0-25)"))
-            for letter in list(steckerbrettDictionary.keys()):
-                if letter in alphabetList:
-                    alphabetList.remove(letter)
-                    alphabetList.remove(steckerbrettDictionary[letter])
-                    steckerbrettDictionary.update({steckerbrettDictionary[letter]:letter})
-            reflector = [letter for letter in reversed(alphabetList)]
+            alphabetList, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor = enigmaEncryptDecryptInit()
             if values['FiveChar'] == True:
-                window['-PLAINTEXT_DECRYPT-'].update(e.write_to_file(values['-PATH_DECRYPT-'], e.wrapFiveCharacters(e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList, reflector))))
+                window['-PLAINTEXT_DECRYPT-'].update(e.write_to_file(values['-PATH_DECRYPT-'], e.wrapFiveCharacters(e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList))))
             else:
-                window['-PLAINTEXT_DECRYPT-'].update(e.write_to_file(values['-PATH_DECRYPT-'], e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList, reflector)))
+                window['-PLAINTEXT_DECRYPT-'].update(e.write_to_file(values['-PATH_DECRYPT-'], e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList)))
 
 window.close()

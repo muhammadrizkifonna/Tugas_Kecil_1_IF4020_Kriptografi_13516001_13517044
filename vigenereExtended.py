@@ -59,7 +59,7 @@ def decryptTextExtendedVigenere(cipherText, key):
 
 def wrapFiveCharacters(message):
     messageWrapFive = wrap(message,5)
-    return '-'.join(messageWrapFive)
+    return ' '.join(messageWrapFive)
 
 def write_to_file(path, text):
     file1 = open(path,"w+") 
