@@ -21,9 +21,9 @@ def extendedGCDEuclideanAlgorithm(a, b):
     return greatestCommonDenominator, x, y
 
 def getModularInverse(a, m):
-    gcd, x, y = extendedGCDEuclideanAlgorithm(a, m) 
-    if gcd != 1: 
-        return None  # modular inverse does not exist 
+    greatestCommonDenominator, x, y = extendedGCDEuclideanAlgorithm(a, m) 
+    if greatestCommonDenominator != 1: 
+        return None  
     else: 
         return x % m
 
