@@ -1,8 +1,38 @@
+from textwrap import wrap
+
 def write_to_file(path, ciphertext):
     file1 = open(path,"w") 
     file1.write(ciphertext) 
     file1.close()
 
+def wrapFiveCharacters(message):
+    messageWrapFive = wrap(message,5)
+    return ' '.join(messageWrapFive)
+
+def toUpperCase(text):
+    return "".join(filter(str.isupper, text.upper()))
+
+def extendedGCDEuclideanAlgorithm(a, b):
+    x,y, u,v = 0,1, 1,0
+    while a != 0: 
+        q, r = b//a, b%a 
+        m, n = x-u*q, y-v*q 
+        b,a, x,y, u,v = a,r, u,v, m,n 
+    gcd = b 
+    return gcd, x, y 
+    # if a == 0 :   
+    #     return b, 0, 1
+    # greatestCommonDenominator, x1, y1 = extendedGCDEuclideanAlgorithm(b%a, a)
+    # x = y1 - (b//a) * x1  
+    # y = x1
+    # return greatestCommonDenominator, x, y
+
+def getModularInverse(a, m):
+    gcd, x, y = extendedGCDEuclideanAlgorithm(a, m) 
+    if gcd != 1: 
+        return None  # modular inverse does not exist 
+    else: 
+        return x % m
 
 def encryption(plaintext, key_m, key_b, from_file, path, write_to_file):
     #Input plaintext
@@ -19,7 +49,7 @@ def encryption(plaintext, key_m, key_b, from_file, path, write_to_file):
         plaintext=seperator.join(plaintext_list)
 
     #Convert into lowercase#
-    plaintext=plaintext.lower()
+    plaintext=toUpperCase(plaintext)
     #key=key.lower()
 
     #Remove comma
@@ -72,12 +102,12 @@ def encryption(plaintext, key_m, key_b, from_file, path, write_to_file):
     print(key)
     """
     #Alphabet list for conversion from number to character#
-    alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',\
-             'w', 'x', 'y', 'z']
+    alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    alphabet = list(alphabet)
     ciphertext=''
     for i in range(len(plaintext)):
-        if (i%5==0) and (i!=0):
-            ciphertext+='-'
+        # if (i%5==0) and (i!=0):
+        #     ciphertext+='-'
         ciphernumber=(int(key_m)*alphabet.index(plaintext[i])+int(key_b))%26
         #ciphernumber=(alphabet.index(plaintext[i])+alphabet.index(key[i]))%26
         #print(ciphernumber, end=', ')
@@ -86,8 +116,14 @@ def encryption(plaintext, key_m, key_b, from_file, path, write_to_file):
     return ciphertext
 
 
-def decryption(ciphertext, key_m, key_b):
+def decryption(ciphertext, key_m, key_b, from_file = False, path = '', write_to_file = False):
     #Input plaintext
+    if (from_file):
+        file1 = open(path,"r") 
+        ciphertext_list = file1.readlines()
+        seperator=''
+        file1.close()
+        ciphertext=seperator.join(ciphertext_list)
 
     #ciphertext = input("Masukkan ciphertext:")
 
@@ -99,7 +135,7 @@ def decryption(ciphertext, key_m, key_b):
     #print(key)
 
     #Convert into lowercase#
-    ciphertext=ciphertext.lower()
+    ciphertext=toUpperCase(ciphertext)
     #key=key.lower()
 
     #Remove comma
@@ -153,16 +189,24 @@ def decryption(ciphertext, key_m, key_b):
     print(key)
     """
     #Alphabet list for conversion from number to character#
-    alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',\
-             'w', 'x', 'y', 'z']
+    alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    alphabet = list(alphabet)
     key_m=int(key_m)
     key_b=int(key_b)
     #Find the inverse of key_m
-    for i in range(0,1000):
-        if (((key_m*i)%26)==1):
-            break
+    # plaintextList = []
+    # for i in range(len(ciphertext)):
+    #     modularInverse = getModularInverse(key_m, 26)
+    #     shift = ord(ciphertext[i])-ord('A')-key_b
+    #     char = chr(((modularInverse*shift)%26)+ord('A'))
+    #     plaintextList.append(char)
+    # plaintext = ''.join(plaintextList)
+
+    # for i in range(0,1000):
+    #     if (((key_m*i)%26)==1):
+    #         break
     
-    key_m_inverse = i
+    key_m_inverse = getModularInverse(key_m, 26)
 
     plaintext=''
     for i in range(len(ciphertext)):
@@ -172,7 +216,7 @@ def decryption(ciphertext, key_m, key_b):
         plainnumber=(key_m_inverse*(alphabet.index(ciphertext[i])-key_b))%26
 
         plaintext+=alphabet[plainnumber]
-        #print(ciphertext)
+        print(ciphertext)
     return plaintext
 
 

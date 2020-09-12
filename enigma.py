@@ -36,7 +36,7 @@ def encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRot
     reflector = [letter for letter in reversed(alphabetList)]
     print("reflector = ", reflector)
     resultText = []
-    upperCaseText = text.upper()
+    upperCaseText = toUpperCase(text)
     upperCaseText.split()
     for letter in upperCaseText:
         if letter in steckerbrettDictionary:

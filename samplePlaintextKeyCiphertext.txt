@@ -1,0 +1,59 @@
+Vigenere
+1. 
+plaintext : lorem ipsum dolor
+key : sit
+ciphertext : dwkwu-bhane-lhdwk
+2. 
+plaintext : thisplaintext
+key : sony
+ciphertext : lvvqh-zngfh-rvl
+
+Full vigenere
+plaintext : Lorem ipsum dolor
+key : sit
+ciphertext : dwkwubhanelhdwk
+
+Auto key vigenere
+plaintext : Lorem ipsum dolor
+key : sit
+ciphertext : dwkpa-ztecb-vixrf
+
+extendedVigenere
+Plaintext: hello. hello
+Key: hello
+Ciphertext: oiww}oiww}
+
+playfair
+Plaintext: Hi.de th.e go.ld in th.e tr.ee.stu.mp!
+key = "playfair example"
+Ciphertext: BMODZBXDNABEKUDMUIXMMOUVIF
+
+SuperEncryption
+Plaintext: hello. hello
+Key: ac~tac~t
+Ciphertext: HALEGEQOEN-*
+
+Affine
+plaintext : kripto
+key (m) : 7
+key (b) : 10
+ciphertext : czoln-e
+
+Hill
+Plaintext: AC.TAC.T
+Key: GYBNQKURP
+Ciphertext: POHPOH
+
+enigma
+Plaintext: there is no time
+No. of steckerbrett pairs: 2
+Pair #1
+First alphabet: B
+Second alphabet: A
+Pair #1
+First alphabet: E
+Second alphabet: Z
+Ciphertext: IWZQZ JX KL KXVZ
+
+
+

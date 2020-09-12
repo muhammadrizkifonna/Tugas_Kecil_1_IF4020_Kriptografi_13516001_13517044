@@ -1,5 +1,15 @@
 import random
 import pickle
+from textwrap import wrap
+
+def write_to_file(path, ciphertext):
+    file1 = open(path,"w") 
+    file1.write(ciphertext) 
+    file1.close()
+
+def wrapFiveCharacters(message):
+    messageWrapFive = wrap(message,5)
+    return ' '.join(messageWrapFive)
 
 def encryption(plaintext, key, from_file, path, write_to_file):
     #Input plaintext
@@ -16,8 +26,8 @@ def encryption(plaintext, key, from_file, path, write_to_file):
         plaintext=seperator.join(plaintext_list)
 
     #Convert into lowercase#
-    plaintext=plaintext.lower()
-    key=key.lower()
+    plaintext= toUpperCase(plaintext)
+    key=toUpperCase(key)
 
     #Remove comma
     plaintext = plaintext.replace(',', '')
@@ -84,8 +94,8 @@ def encryption(plaintext, key, from_file, path, write_to_file):
     """
     
     #Alphabet list for conversion from number to character#
-    alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',\
-                'w', 'x', 'y', 'z']
+    alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    alphabet = list(alphabet)
 
     #print(random.sample(alphabet, len(alphabet)))
     """
@@ -124,8 +134,8 @@ def encryption(plaintext, key, from_file, path, write_to_file):
     print(alphabet_shuffled[0][0])
     ciphertext=''
     for i in range(len(plaintext)):
-        if (i%5==0) and (i!=0):
-            ciphertext+='-'
+        # if (i%5==0) and (i!=0):
+        #     ciphertext+='-'
         """
         ciphernumber=(alphabet.index(plaintext[i])+alphabet.index(key[i]))%26
         #print(ciphernumber, end=', ')
@@ -139,8 +149,6 @@ def encryption(plaintext, key, from_file, path, write_to_file):
         ciphertext+=alphabet_shuffled[ciphernumber_x][ciphernumber_y]
         print(ciphertext)
 
-
-
     return ciphertext
     
 def write_to_file(path, ciphertext):
@@ -148,8 +156,17 @@ def write_to_file(path, ciphertext):
     file1.write(ciphertext) 
     file1.close()
 
-def decryption(ciphertext, key):
-    #Input plaintext
+def toUpperCase(text):
+    return "".join(filter(str.isupper, text.upper()))
+
+def decryption(ciphertext, key, from_file = False, path = ''):
+    #Input ciphertext
+    if (from_file):
+        file1 = open(path,"r") 
+        ciphertext_list = file1.readlines()
+        seperator=''
+        file1.close()
+        ciphertext=seperator.join(ciphertext_list)
 
     #ciphertext = input("Masukkan ciphertext:")
     print("Ciphertext:", end="")
@@ -161,8 +178,8 @@ def decryption(ciphertext, key):
     #print(key)
 
     #Convert into lowercase#
-    ciphertext=ciphertext.lower()
-    key=key.lower()
+    ciphertext=toUpperCase(ciphertext)
+    key=toUpperCase(key)
 
     #Remove comma
     ciphertext = ciphertext.replace(',', '')
@@ -216,21 +233,18 @@ def decryption(ciphertext, key):
     #Alphabet list for conversion from number to character#
     alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',\
              'w', 'x', 'y', 'z']
-
     
     plaintext=''
     for i in range(len(ciphertext)):
         #alphabet_cycle=itertools.cycle(alphabet)
         #print(key[i])
         plainnumber=(alphabet.index(ciphertext[i])-alphabet.index(key[i]))%26
-
-
         plaintext+=alphabet[plainnumber]
         #print(ciphertext)
     """
     #Alphabet list for conversion from number to character#
-    alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',\
-             'w', 'x', 'y', 'z']
+    alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    alphabet = list(alphabet)
     
     # define an empty list
     alphabet_shuffled = []

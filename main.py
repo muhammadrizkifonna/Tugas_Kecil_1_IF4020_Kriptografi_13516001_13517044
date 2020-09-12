@@ -7,12 +7,13 @@ import vigenereExtended as vge
 import enigma as e
 import playfair as p
 import hill as h
+import myszkowskiTransposition as se
 
 layout = [[sg.Text('Cipher method')],
-            [sg.Radio('vignere', "cipherMethod", default=True, size=(10,1), key='vignere'), 
-                sg.Radio('FullVignere', "cipherMethod", key='FullVignere'), 
-                sg.Radio('RunningKeyVignere', "cipherMethod", key='RunningKeyVignere'), 
-                sg.Radio('ExtendedVignere', "cipherMethod", key='ExtendedVignere'), 
+            [sg.Radio('vigenere', "cipherMethod", default=True, size=(10,1), key='Vigenere'), 
+                sg.Radio('FullVigenere', "cipherMethod", key='FullVigenere'), 
+                sg.Radio('RunningKeyVigenere', "cipherMethod", key='RunningKeyVigenere'), 
+                sg.Radio('ExtendedVigenere', "cipherMethod", key='ExtendedVigenere'), 
                 sg.Radio('Playfair', "cipherMethod", key='Playfair'),
                 sg.Radio('SuperEncryption', "cipherMethod", key='SuperEncryption'),
                 sg.Radio('Affine', "cipherMethod", key='Affine'),
@@ -63,89 +64,119 @@ while True:
     if event is None or event == 'Exit':
         break
     elif event=='Encrypt':
-        if values['vignere'] == True:
-            window['-CIPHERTEXT_ENCRYPT-'].update(vg.encryption(values['-PLAINTEXT_ENCRYPT-'], values['-KEY_ENCRYPT-'], False, '', False))
-        if values['FullVignere'] == True:
-            window['-CIPHERTEXT_ENCRYPT-'].update(fvg.encryption(values['-PLAINTEXT_ENCRYPT-'], values['-KEY_ENCRYPT-'], False, '', False))
-        if values['RunningKeyVignere'] == True:
-            window['-CIPHERTEXT_ENCRYPT-'].update(avg.encryption(values['-PLAINTEXT_ENCRYPT-'], values['-KEY_ENCRYPT-'], False, '', False))
-        if values['ExtendedVignere'] == True:
+        if values['Vigenere']:
+            if values['FiveChar']:
+                window['-CIPHERTEXT_ENCRYPT-'].update(vg.wrapFiveCharacters(vg.encryption(values['-PLAINTEXT_ENCRYPT-'], values['-KEY_ENCRYPT-'], False, '', False)))
+            else:
+                window['-CIPHERTEXT_ENCRYPT-'].update(vg.encryption(values['-PLAINTEXT_ENCRYPT-'], values['-KEY_ENCRYPT-'], False, '', False))
+        if values['FullVigenere']:
+            if values['FiveChar']:
+                window['-CIPHERTEXT_ENCRYPT-'].update(fvg.wrapFiveCharacters(fvg.encryption(values['-PLAINTEXT_ENCRYPT-'], values['-KEY_ENCRYPT-'], False, '', False)))
+            else:
+                window['-CIPHERTEXT_ENCRYPT-'].update(fvg.encryption(values['-PLAINTEXT_ENCRYPT-'], values['-KEY_ENCRYPT-'], False, '', False))
+        if values['RunningKeyVigenere']:
+            if values['FiveChar']:
+                window['-CIPHERTEXT_ENCRYPT-'].update(avg.wrapFiveCharacters(avg.encryption(values['-PLAINTEXT_ENCRYPT-'], values['-KEY_ENCRYPT-'], False, '', False)))
+            else:
+                window['-CIPHERTEXT_ENCRYPT-'].update(avg.encryption(values['-PLAINTEXT_ENCRYPT-'], values['-KEY_ENCRYPT-'], False, '', False))
+        if values['ExtendedVigenere']:
             message = values['-PLAINTEXT_ENCRYPT-']
             key = values['-KEY_ENCRYPT-']
-            if values['FiveChar'] == True:
+            if values['FiveChar']:
                 window['-CIPHERTEXT_ENCRYPT-'].update(vge.wrapFiveCharacters(vge.encryptTextExtendedVigenere(message, key)))
             else:
                 window['-CIPHERTEXT_ENCRYPT-'].update(vge.encryptTextExtendedVigenere(message, key))
-        if values['Playfair'] == True:
+        if values['Playfair']:
             message = values['-PLAINTEXT_ENCRYPT-']
             key = values['-KEY_ENCRYPT-']
-            if values['FiveChar'] == True:
+            if values['FiveChar']:
                 window['-CIPHERTEXT_ENCRYPT-'].update(p.wrapFiveCharacters(p.toUpperCase(p.playfairEncrypt(message, key))))
             else:
                 window['-CIPHERTEXT_ENCRYPT-'].update(p.toUpperCase(p.playfairEncrypt(message, key)))
-        if values['SuperEncryption'] == True:
-            pass
-        if values['Affine'] == True:
-            window['-CIPHERTEXT_ENCRYPT-'].update(af.encryption(values['-PLAINTEXT_ENCRYPT-'], values['-KEY_ENCRYPT_M-'], values['-KEY_ENCRYPT_B-'], False, '', False))
-        if values['Hill'] == True:
+        if values['SuperEncryption']:
+            if values['FiveChar']:
+                window['-CIPHERTEXT_ENCRYPT-'].update(se.wrapFiveCharacters(se.myszkowskiTranspositionEncrypt(vg.encryption(values['-PLAINTEXT_ENCRYPT-'], values['-KEY_ENCRYPT-'], False, '', False), values['-KEY_ENCRYPT-'])))
+            else:
+                window['-CIPHERTEXT_ENCRYPT-'].update(se.myszkowskiTranspositionEncrypt(vg.encryption(values['-PLAINTEXT_ENCRYPT-'], values['-KEY_ENCRYPT-'], False, '', False), values['-KEY_ENCRYPT-']))
+        if values['Affine']:
+            if values['FiveChar']:
+                window['-CIPHERTEXT_ENCRYPT-'].update(af.wrapFiveCharacters(af.encryption(values['-PLAINTEXT_ENCRYPT-'], values['-KEY_ENCRYPT_M-'], values['-KEY_ENCRYPT_B-'], False, '', False)))
+            else:
+                window['-CIPHERTEXT_ENCRYPT-'].update(af.encryption(values['-PLAINTEXT_ENCRYPT-'], values['-KEY_ENCRYPT_M-'], values['-KEY_ENCRYPT_B-'], False, '', False))
+        if values['Hill']:
             message = values['-PLAINTEXT_ENCRYPT-']
             key = values['-KEY_ENCRYPT-']
             resultMessage = h.generateHillResultMessage(message, key, encrypt = True)
-            if values['FiveChar'] == True:
+            if values['FiveChar']:
                 window['-CIPHERTEXT_ENCRYPT-'].update(h.wrapFiveCharacters(resultMessage))
             else:
                 window['-CIPHERTEXT_ENCRYPT-'].update(resultMessage)
-        if values['Enigma'] == True:
+        if values['Enigma']:
             text = values['-PLAINTEXT_ENCRYPT-']
             alphabetList, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor = enigmaEncryptDecryptInit()
             print("gammaRotor = ", gammaRotor)
-            if values['FiveChar'] == True:
+            if values['FiveChar']:
                 window['-CIPHERTEXT_ENCRYPT-'].update(e.wrapFiveCharacters(e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList)))
             else:
                 window['-CIPHERTEXT_ENCRYPT-'].update(e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList))
     elif event=='Encrypt Text File':
-        if values['vignere'] == True:
-            window['-CIPHERTEXT_ENCRYPT-'].update(vg.encryption('', values['-KEY_ENCRYPT-'], True, values['-PATH_ENCRYPT-']))
-        if values['FullVignere'] == True:
-            pass
-        if values['RunningKeyVignere'] == True:
-            pass
-        if values['ExtendedVignere'] == True:
+        if values['Vigenere']:
+            if values['FiveChar']:
+                window['-CIPHERTEXT_ENCRYPT-'].update(vg.wrapFiveCharacters(vg.encryption('', values['-KEY_ENCRYPT-'], True, values['-PATH_SOURCE_ENCRYPT-'])))
+            else:
+                window['-CIPHERTEXT_ENCRYPT-'].update(vg.encryption('', values['-KEY_ENCRYPT-'], True, values['-PATH_SOURCE_ENCRYPT-']))
+        if values['FullVigenere']:
+            if values['FiveChar']:
+                window['-CIPHERTEXT_ENCRYPT-'].update(fvg.wrapFiveCharacters(fvg.encryption('', values['-KEY_ENCRYPT-'], True, values['-PATH_SOURCE_ENCRYPT-'])))
+            else:
+                window['-CIPHERTEXT_ENCRYPT-'].update(fvg.encryption('', values['-KEY_ENCRYPT-'], True, values['-PATH_SOURCE_ENCRYPT-']))
+        if values['RunningKeyVigenere']:
+            if values['FiveChar']:
+                window['-CIPHERTEXT_ENCRYPT-'].update(avg.wrapFiveCharacters(avg.encryption('', values['-KEY_ENCRYPT-'], True, values['-PATH_SOURCE_ENCRYPT-'])))
+            else:
+                window['-CIPHERTEXT_ENCRYPT-'].update(avg.encryption('', values['-KEY_ENCRYPT-'], True, values['-PATH_SOURCE_ENCRYPT-']))
+        if values['ExtendedVigenere']:
             message = e.readTextFromFile(values['-PATH_SOURCE_ENCRYPT-'])
             key = values['-KEY_ENCRYPT-']
-            if values['FiveChar'] == True:
+            if values['FiveChar']:
                 window['-CIPHERTEXT_ENCRYPT-'].update(vge.wrapFiveCharacters(vge.encryptTextExtendedVigenere(message, key)))
             else:
                 window['-CIPHERTEXT_ENCRYPT-'].update(vge.encryptTextExtendedVigenere(message, key))
-        if values['Playfair'] == True:
+        if values['Playfair']:
             message = e.readTextFromFile(values['-PATH_SOURCE_ENCRYPT-'])
             key = values['-KEY_ENCRYPT-']
-            if values['FiveChar'] == True:
+            if values['FiveChar']:
                 window['-CIPHERTEXT_ENCRYPT-'].update(p.wrapFiveCharacters(p.toUpperCase(p.playfairEncrypt(message, key))))
             else:
                 window['-CIPHERTEXT_ENCRYPT-'].update(p.toUpperCase(p.playfairEncrypt(message, key)))
-        if values['SuperEncryption'] == True:
-            pass
-        if values['Affine'] == True:
-            pass
-        if values['Hill'] == True:
+        if values['SuperEncryption']:
+            if values['FiveChar']:
+                window['-CIPHERTEXT_ENCRYPT-'].update(se.wrapFiveCharacters(se.myszkowskiTranspositionEncrypt(vg.encryption('', values['-KEY_ENCRYPT-'], True, values['-PATH_SOURCE_ENCRYPT-']), values['-KEY_ENCRYPT-'])))
+            else:
+                window['-CIPHERTEXT_ENCRYPT-'].update(se.myszkowskiTranspositionEncrypt(vg.encryption('', values['-KEY_ENCRYPT-'], True, values['-PATH_SOURCE_ENCRYPT-']), values['-KEY_ENCRYPT-']))
+        if values['Affine']:
+            if values['FiveChar']:
+                window['-CIPHERTEXT_ENCRYPT-'].update(af.wrapFiveCharacters(af.encryption('', values['-KEY_ENCRYPT_M-'], values['-KEY_ENCRYPT_B-'], True, values['-PATH_SOURCE_ENCRYPT-'])))
+            else:
+                window['-CIPHERTEXT_ENCRYPT-'].update(af.encryption('', values['-KEY_ENCRYPT_M-'], values['-KEY_ENCRYPT_B-'], True, values['-PATH_SOURCE_ENCRYPT-']))
+        if values['Hill']:
             message = e.readTextFromFile(values['-PATH_SOURCE_ENCRYPT-'])
             key = values['-KEY_ENCRYPT-']
             resultMessage = h.generateHillResultMessage(message, key, encrypt = True)
-            if values['FiveChar'] == True:
+            if values['FiveChar']:
                 window['-CIPHERTEXT_ENCRYPT-'].update(h.wrapFiveCharacters(resultMessage))
             else:
                 window['-CIPHERTEXT_ENCRYPT-'].update(resultMessage)
-        if values['Enigma'] == True:
+        if values['Enigma']:
             text = e.readTextFromFile(values['-PATH_SOURCE_ENCRYPT-'])
             alphabetList, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor = enigmaEncryptDecryptInit()
-            if values['FiveChar'] == True:
+            if values['FiveChar']:
                 window['-CIPHERTEXT_ENCRYPT-'].update(e.wrapFiveCharacters(e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList)))
             else:
                 window['-CIPHERTEXT_ENCRYPT-'].update(e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList))
     
     elif event=='Encrypt File, Output File':
-        if values['ExtendedVignere'] == True:
+        if values['ExtendedVigenere']:
             listOfBytes = []
             with open(values['-PATH_SOURCE_ENCRYPT-'], "rb") as f:
                 while (byte := f.read(1)):
@@ -160,172 +191,232 @@ while True:
             g.close()
 
     elif event=='Encrypt from Text File, Output into Text File':
-        if values['vignere'] == True:
-            pass
-        if values['FullVignere'] == True:
-            pass
-        if values['RunningKeyVignere'] == True:
-            pass
-        if values['ExtendedVignere'] == True:
+        if values['Vigenere']:
+            if values['FiveChar']:
+                window['-CIPHERTEXT_ENCRYPT-'].update(vg.write_to_file(values['PATH_ENCRYPT'], vg.wrapFiveCharacters(vg.encryption('', values['-KEY_ENCRYPT-'], True, values['-PATH_SOURCE_ENCRYPT-']))))
+            else:
+                window['-CIPHERTEXT_ENCRYPT-'].update(vg.write_to_file(values['PATH_ENCRYPT'], vg.encryption('', values['-KEY_ENCRYPT-'], True, values['-PATH_SOURCE_ENCRYPT-'])))
+        if values['FullVigenere']:
+            if values['FiveChar']:
+                window['-CIPHERTEXT_ENCRYPT-'].update(fvg.write_to_file(values['PATH_ENCRYPT'], fvg.wrapFiveCharacters(fvg.encryption('', values['-KEY_ENCRYPT-'], True, values['-PATH_SOURCE_ENCRYPT-']))))
+            else:
+                window['-CIPHERTEXT_ENCRYPT-'].update(fvg.write_to_file(values['PATH_ENCRYPT'], fvg.encryption('', values['-KEY_ENCRYPT-'], True, values['-PATH_SOURCE_ENCRYPT-'])))
+        if values['RunningKeyVigenere']:
+            if values['FiveChar']:
+                window['-CIPHERTEXT_ENCRYPT-'].update(avg.write_to_file(values['PATH_ENCRYPT'], avg.wrapFiveCharacters(avg.encryption('', values['-KEY_ENCRYPT-'], True, values['-PATH_SOURCE_ENCRYPT-']))))
+            else:
+                window['-CIPHERTEXT_ENCRYPT-'].update(avg.write_to_file(values['PATH_ENCRYPT'], avg.encryption('', values['-KEY_ENCRYPT-'], True, values['-PATH_SOURCE_ENCRYPT-'])), values['-PATH_ENCRYPT'])
+        if values['ExtendedVigenere']:
             message = e.readTextFromFile(values['-PATH_SOURCE_ENCRYPT-'])
             key = values['-KEY_ENCRYPT-']
-            if values['FiveChar'] == True:
+            if values['FiveChar']:
                 window['-CIPHERTEXT_ENCRYPT-'].update(vge.write_to_file(values['-PATH_ENCRYPT-'], vge.wrapFiveCharacters(vge.encryptTextExtendedVigenere(message, key))))
             else:
                 window['-CIPHERTEXT_ENCRYPT-'].update(vge.write_to_file(values['-PATH_ENCRYPT-'], vge.encryptTextExtendedVigenere(message, key)))  
-        if values['Playfair'] == True:
+        if values['Playfair']:
             message = e.readTextFromFile(values['-PATH_SOURCE_ENCRYPT-'])
             key = values['-KEY_ENCRYPT-']
-            if values['FiveChar'] == True:
+            if values['FiveChar']:
                 window['-CIPHERTEXT_ENCRYPT-'].update(p.write_to_file(values['-PATH_ENCRYPT-'], p.wrapFiveCharacters(p.toUpperCase(p.playfairEncrypt(message, key)))))
             else:
                 window['-CIPHERTEXT_ENCRYPT-'].update(p.write_to_file(values['-PATH_ENCRYPT-'], p.toUpperCase(p.playfairEncrypt(message, key))))
-        if values['SuperEncryption'] == True:
-            pass
-        if values['Affine'] == True:
-            pass
-        if values['Hill'] == True:
+        if values['SuperEncryption']:
+            if values['FiveChar']:
+                window['-CIPHERTEXT_ENCRYPT-'].update(se.write_to_file(values['-PATH_ENCRYPT-'], se.wrapFiveCharacters(se.myszkowskiTranspositionEncrypt(vg.encryption('', values['-KEY_ENCRYPT-'], True, values['-PATH_SOURCE_ENCRYPT-']), values['-KEY_ENCRYPT-']))))
+            else:
+                window['-CIPHERTEXT_ENCRYPT-'].update(se.write_to_file(values['-PATH_ENCRYPT-'], se.myszkowskiTranspositionEncrypt(vg.encryption('', values['-KEY_ENCRYPT-'], True, values['-PATH_SOURCE_ENCRYPT-']), values['-KEY_ENCRYPT-'])))
+        if values['Affine']:
+            if values['FiveChar']:
+                window['-CIPHERTEXT_ENCRYPT-'].update(af.write_to_file(values['-PATH_ENCRYPT-'], af.wrapFiveCharacters(af.encryption('', values['-KEY_ENCRYPT_M-'], values['-KEY_ENCRYPT_B-'], True, values['-PATH_SOURCE_ENCRYPT-']))))
+            else:
+                window['-CIPHERTEXT_ENCRYPT-'].update(af.write_to_file(values['-PATH_ENCRYPT-'], af.encryption('', values['-KEY_ENCRYPT_M-'], values['-KEY_ENCRYPT_B-'], True, values['-PATH_SOURCE_ENCRYPT-'])))
+        if values['Hill']:
             message = e.readTextFromFile(values['-PATH_SOURCE_ENCRYPT-'])
             key = values['-KEY_ENCRYPT-']
             resultMessage = h.generateHillResultMessage(message, key, encrypt = True)
-            if values['FiveChar'] == True:
+            if values['FiveChar']:
                 window['-CIPHERTEXT_ENCRYPT-'].update(h.write_to_file(values['-PATH_ENCRYPT-'], h.wrapFiveCharacters(resultMessage)))
             else:
                 window['-CIPHERTEXT_ENCRYPT-'].update(h.write_to_file(values['-PATH_ENCRYPT-'], resultMessage))
-        if values['Enigma'] == True:
+        if values['Enigma']:
             text = e.readTextFromFile(values['-PATH_SOURCE_ENCRYPT-'])
             alphabetList, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor = enigmaEncryptDecryptInit()
-            if values['FiveChar'] == True:
+            if values['FiveChar']:
                 window['-CIPHERTEXT_ENCRYPT-'].update(e.write_to_file(values['-PATH_ENCRYPT-'], e.wrapFiveCharacters(e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList))))
             else:
                 window['-CIPHERTEXT_ENCRYPT-'].update(e.write_to_file(values['-PATH_ENCRYPT-'], e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList)))
 
     elif event=='Encrypt Output into Text File':
-        if values['vignere'] == True:
-            window['-CIPHERTEXT_ENCRYPT-'].update(vg.write_to_file(values['-PATH_ENCRYPT-'], vg.encryption(values['-PLAINTEXT_ENCRYPT-'], values['-KEY_ENCRYPT-'], False, '', False)))
-        if values['FullVignere'] == True:
-            pass
-        if values['RunningKeyVignere'] == True:
-            pass
-        if values['ExtendedVignere'] == True:
+        if values['Vigenere']:
+            if values['FiveChar']:
+                window['-CIPHERTEXT_ENCRYPT-'].update(vg.write_to_file(values['-PATH_ENCRYPT-'], vg.wrapFiveCharacters(vg.encryption(values['-PLAINTEXT_ENCRYPT-'], values['-KEY_ENCRYPT-'], False, '', False))))
+            else:
+                window['-CIPHERTEXT_ENCRYPT-'].update(vg.write_to_file(values['-PATH_ENCRYPT-'], vg.encryption(values['-PLAINTEXT_ENCRYPT-'], values['-KEY_ENCRYPT-'], False, '', False)))
+        if values['FullVigenere']:
+            if values['FiveChar']:
+                window['-CIPHERTEXT_ENCRYPT-'].update(fvg.write_to_file(values['-PATH_ENCRYPT-'], fvg.wrapFiveCharacters(fvg.encryption(values['-PLAINTEXT_ENCRYPT-'], values['-KEY_ENCRYPT-'], False, '', False))))
+            else:
+                window['-CIPHERTEXT_ENCRYPT-'].update(fvg.write_to_file(values['-PATH_ENCRYPT-'], fvg.encryption(values['-PLAINTEXT_ENCRYPT-'], values['-KEY_ENCRYPT-'], False, '', False)))
+        if values['RunningKeyVigenere']:
+            if values['FiveChar']:
+                window['-CIPHERTEXT_ENCRYPT-'].update(avg.write_to_file(values['-PATH_ENCRYPT-'], avg.wrapFiveCharacters(avg.encryption(values['-PLAINTEXT_ENCRYPT-'], values['-KEY_ENCRYPT-'], False, '', False))))
+            else:
+                window['-CIPHERTEXT_ENCRYPT-'].update(avg.write_to_file(values['-PATH_ENCRYPT-'], avg.encryption(values['-PLAINTEXT_ENCRYPT-'], values['-KEY_ENCRYPT-'], False, '', False)))
+        if values['ExtendedVigenere']:
             message = values['-PLAINTEXT_ENCRYPT-']
             key = values['-KEY_ENCRYPT-']
-            if values['FiveChar'] == True:
+            if values['FiveChar']:
                 window['-CIPHERTEXT_ENCRYPT-'].update(vge.write_to_file(values['-PATH_ENCRYPT-'], vge.wrapFiveCharacters(vge.encryptTextExtendedVigenere(message, key))))
             else:
                 window['-CIPHERTEXT_ENCRYPT-'].update(vge.write_to_file(values['-PATH_ENCRYPT-'], vge.encryptTextExtendedVigenere(message, key)))
-        if values['Playfair'] == True:
+        if values['Playfair']:
             message = values['-PLAINTEXT_ENCRYPT-']
             key = values['-KEY_ENCRYPT-']
-            if values['FiveChar'] == True:
+            if values['FiveChar']:
                 window['-CIPHERTEXT_ENCRYPT-'].update(p.write_to_file(values['-PATH_ENCRYPT-'], p.wrapFiveCharacters(p.toUpperCase(p.playfairEncrypt(message, key)))))
             else:
                 window['-CIPHERTEXT_ENCRYPT-'].update(p.write_to_file(values['-PATH_ENCRYPT-'], p.toUpperCase(p.playfairEncrypt(message, key))))
-        if values['SuperEncryption'] == True:
-            pass
-        if values['Affine'] == True:
-            pass
-        if values['Hill'] == True:
+        if values['SuperEncryption']:
+            if values['FiveChar']:
+                window['-CIPHERTEXT_ENCRYPT-'].update(se.write_to_file(values['-PATH_ENCRYPT-'], se.wrapFiveCharacters(se.myszkowskiTranspositionEncrypt(vg.encryption(values['-PLAINTEXT_ENCRYPT-'], values['-KEY_ENCRYPT-'], False, '', False), values['-KEY_ENCRYPT-']))))
+            else:
+                window['-CIPHERTEXT_ENCRYPT-'].update(se.write_to_file(values['-PATH_ENCRYPT-'], se.myszkowskiTranspositionEncrypt(vg.encryption(values['-PLAINTEXT_ENCRYPT-'], values['-KEY_ENCRYPT-'], False, '', False), values['-KEY_ENCRYPT-'])))
+        if values['Affine']:
+            if values['FiveChar']:
+                window['-CIPHERTEXT_ENCRYPT-'].update(af.write_to_file(values['-PATH_ENCRYPT-'], af.wrapFiveCharacters(af.encryption(values['-PLAINTEXT_ENCRYPT-'], values['-KEY_ENCRYPT_M-'], values['-KEY_ENCRYPT_B-'], False, '', False))))
+            else:
+                window['-CIPHERTEXT_ENCRYPT-'].update(af.write_to_file(values['-PATH_ENCRYPT-'], af.encryption(values['-PLAINTEXT_ENCRYPT-'], values['-KEY_ENCRYPT_M-'], values['-KEY_ENCRYPT_B-'], False, '', False)))
+        if values['Hill']:
             message = values['-PLAINTEXT_ENCRYPT-']
             key = values['-KEY_ENCRYPT-']
             resultMessage = h.generateHillResultMessage(message, key, encrypt = True)
-            if values['FiveChar'] == True:
+            if values['FiveChar']:
                 window['-CIPHERTEXT_ENCRYPT-'].update(h.write_to_file(values['-PATH_ENCRYPT-'], h.wrapFiveCharacters(resultMessage)))
             else:
                 window['-CIPHERTEXT_ENCRYPT-'].update(h.write_to_file(values['-PATH_ENCRYPT-'], resultMessage))
-        if values['Enigma'] == True:
+        if values['Enigma']:
             text = values['-PLAINTEXT_ENCRYPT-']
             alphabetList, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor = enigmaEncryptDecryptInit()
-            if values['FiveChar'] == True:
+            if values['FiveChar']:
                 window['-CIPHERTEXT_ENCRYPT-'].update(e.write_to_file(values['-PATH_ENCRYPT-'], e.wrapFiveCharacters(e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList))))
             else:
                 window['-CIPHERTEXT_ENCRYPT-'].update(e.write_to_file(values['-PATH_ENCRYPT-'], e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList)))
+    
     elif event=='Decrypt':
-        if values['vignere'] == True:
-            window['-PLAINTEXT_DECRYPT-'].update(vg.decryption(values['-CIPHERTEXT_DECRYPT-'], values['-KEY_DECRYPT-']))
-        if values['FullVignere'] == True:
-            #window['-CIPHERTEXT_ENCRYPT-'].update(fvg.encryption(values['-PLAINTEXT_ENCRYPT-'], values['-KEY_ENCRYPT-'], False, '', False))
-            window['-PLAINTEXT_DECRYPT-'].update(fvg.decryption(values['-CIPHERTEXT_DECRYPT-'], values['-KEY_DECRYPT-']))
-        if values['RunningKeyVignere'] == True:
-            window['-PLAINTEXT_DECRYPT-'].update(avg.decryption(values['-CIPHERTEXT_DECRYPT-'], values['-KEY_DECRYPT-']))
-        if values['ExtendedVignere'] == True:
+        if values['Vigenere']:
+            if values['FiveChar']:
+                window['-PLAINTEXT_DECRYPT-'].update(vg.wrapFiveCharacters(vg.decryption(values['-CIPHERTEXT_DECRYPT-'], values['-KEY_DECRYPT-'])))
+            else:
+                window['-PLAINTEXT_DECRYPT-'].update(vg.decryption(values['-CIPHERTEXT_DECRYPT-'], values['-KEY_DECRYPT-']))
+        if values['FullVigenere']:
+            if values['FiveChar']:
+                window['-PLAINTEXT_DECRYPT-'].update(fvg.wrapFiveCharacters(fvg.decryption(values['-CIPHERTEXT_DECRYPT-'], values['-KEY_DECRYPT-'])))
+            else:
+                window['-PLAINTEXT_DECRYPT-'].update(fvg.decryption(values['-CIPHERTEXT_DECRYPT-'], values['-KEY_DECRYPT-']))
+        if values['RunningKeyVigenere']:
+            if values['FiveChar']:
+                window['-PLAINTEXT_DECRYPT-'].update(avg.wrapFiveCharacters(avg.decryption(values['-CIPHERTEXT_DECRYPT-'], values['-KEY_DECRYPT-'])))
+            else:
+                window['-PLAINTEXT_DECRYPT-'].update(avg.decryption(values['-CIPHERTEXT_DECRYPT-'], values['-KEY_DECRYPT-']))
+        if values['ExtendedVigenere']:
             message = values['-CIPHERTEXT_DECRYPT-']
             key = values['-KEY_DECRYPT-']
-            if values['FiveChar'] == True:
+            if values['FiveChar']:
                 window['-PLAINTEXT_DECRYPT-'].update(vge.wrapFiveCharacters(vge.decryptTextExtendedVigenere(message, key)))
             else:
                 window['-PLAINTEXT_DECRYPT-'].update(vge.decryptTextExtendedVigenere(message, key))
-        if values['Playfair'] == True:
+        if values['Playfair']:
             message = values['-CIPHERTEXT_DECRYPT-']
             key = values['-KEY_DECRYPT-']
-            if values['FiveChar'] == True:
+            if values['FiveChar']:
                 window['-PLAINTEXT_DECRYPT-'].update(p.wrapFiveCharacters(p.toUpperCase(p.playfairDecrypt(message, key))))
             else:
                 window['-PLAINTEXT_DECRYPT-'].update(p.toUpperCase(p.playfairDecrypt(message, key)))
-        if values['SuperEncryption'] == True:
-            pass
-        if values['Affine'] == True:
-            pass
-        if values['Hill'] == True:
+        if values['SuperEncryption']:
+            if values['FiveChar']:
+                window['-PLAINTEXT_DECRYPT-'].update(vg.wrapFiveCharacters(vg.decryption(se.myszkowskiTranspositionDecrypt(values['-CIPHERTEXT_DECRYPT-'], values['-KEY_DECRYPT-']), values['-KEY_DECRYPT-'])))
+            else:
+                window['-PLAINTEXT_DECRYPT-'].update(vg.decryption(se.myszkowskiTranspositionDecrypt(values['-CIPHERTEXT_DECRYPT-'], values['-KEY_DECRYPT-']), values['-KEY_DECRYPT-']))
+        if values['Affine']:
+            if values['FiveChar']:
+                window['-PLAINTEXT_DECRYPT-'].update(af.wrapFiveCharacters(af.decryption(values['-CIPHERTEXT_DECRYPT-'], values['-KEY_DECRYPT_M-'], values['-KEY_DECRYPT_B-'], False, '', False)))
+            else:
+                window['-PLAINTEXT_DECRYPT-'].update(af.decryption(values['-CIPHERTEXT_DECRYPT-'], values['-KEY_DECRYPT_M-'], values['-KEY_DECRYPT_B-'], False, '', False))
+        if values['Hill']:
             message = values['-CIPHERTEXT_DECRYPT-']
             key = values['-KEY_DECRYPT-']
             resultMessage = h.generateHillResultMessage(message, key, encrypt = False)
-            if values['FiveChar'] == True:
+            if values['FiveChar']:
                 window['-PLAINTEXT_DECRYPT-'].update(h.wrapFiveCharacters(resultMessage))
             else:
                 window['-PLAINTEXT_DECRYPT-'].update(resultMessage)
-        if values['Enigma'] == True:
+        if values['Enigma']:
             text = values['-CIPHERTEXT_DECRYPT-']
             alphabetList, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor = enigmaEncryptDecryptInit()
-            if values['FiveChar'] == True:
+            if values['FiveChar']:
                 window['-PLAINTEXT_DECRYPT-'].update(e.wrapFiveCharacters(e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList)))
             else:
                 window['-PLAINTEXT_DECRYPT-'].update(e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList))
     
     elif event=='Decrypt Text File':
-        if values['vignere'] == True:
-            pass
-        if values['FullVignere'] == True:
-            pass
-        if values['RunningKeyVignere'] == True:
-            pass
-        if values['ExtendedVignere'] == True:
+        if values['Vigenere']:
+            if values['FiveChar']:
+                window['-PLAINTEXT_DECRYPT-'].update(vg.wrapFiveCharacters(vg.decryption('', values['-KEY_DECRYPT-'], True, values['-PATH_SOURCE_DECRYPT-'])))
+            else:
+                window['-PLAINTEXT_DECRYPT-'].update(vg.decryption('', values['-KEY_DECRYPT-'], True, values['-PATH_SOURCE_DECRYPT-']))
+        if values['FullVigenere']:
+            if values['FiveChar']:
+                window['-PLAINTEXT_DECRYPT-'].update(fvg.wrapFiveCharacters(fvg.decryption('', values['-KEY_DECRYPT-'], True, values['-PATH_SOURCE_DECRYPT-'])))
+            else:
+                window['-PLAINTEXT_DECRYPT-'].update(fvg.decryption('', values['-KEY_DECRYPT-'], True, values['-PATH_SOURCE_DECRYPT-']))
+        if values['RunningKeyVigenere']:
+            if values['FiveChar']:
+                window['-PLAINTEXT_DECRYPT-'].update(avg.wrapFiveCharacters(avg.decryption('', values['-KEY_DECRYPT-'], True, values['-PATH_SOURCE_DECRYPT-'])))
+            else:
+                window['-PLAINTEXT_DECRYPT-'].update(avg.decryption('', values['-KEY_DECRYPT-'], True, values['-PATH_SOURCE_DECRYPT-']))
+        if values['ExtendedVigenere']:
             message = e.readTextFromFile(values['-PATH_SOURCE_DECRYPT-'])
             key = values['-KEY_DECRYPT-']
-            if values['FiveChar'] == True:
+            if values['FiveChar']:
                 window['-PLAINTEXT_DECRYPT-'].update(vge.wrapFiveCharacters(vge.decryptTextExtendedVigenere(message, key)))
             else:
                 window['-PLAINTEXT_DECRYPT-'].update(vge.decryptTextExtendedVigenere(message, key))
-        if values['Playfair'] == True:
+        if values['Playfair']:
             message = e.readTextFromFile(values['-PATH_SOURCE_DECRYPT-'])
             key = values['-KEY_DECRYPT-']
-            if values['FiveChar'] == True:
+            if values['FiveChar']:
                 window['-PLAINTEXT_DECRYPT-'].update(p.wrapFiveCharacters(p.toUpperCase(p.playfairDecrypt(message, key))))
             else:
                 window['-PLAINTEXT_DECRYPT-'].update(p.toUpperCase(p.playfairDecrypt(message, key)))
-        if values['SuperEncryption'] == True:
-            pass
-        if values['Affine'] == True:
-            pass
-        if values['Hill'] == True:
+        if values['SuperEncryption']:
+            if values['FiveChar']:
+                window['-PLAINTEXT_DECRYPT-'].update(se.wrapFiveCharacters(se.myszkowskiTranspositionDecrypt(vg.decryption('', values['-KEY_DECRYPT-'], True, values['-PATH_SOURCE_DECRYPT-']), values['-KEY_DECRYPT-'])))
+            else:
+                window['-PLAINTEXT_DECRYPT-'].update(se.myszkowskiTranspositionDecrypt(vg.decryption('', values['-KEY_DECRYPT-'], True, values['-PATH_SOURCE_DECRYPT-']), values['-KEY_DECRYPT-']))
+        if values['Affine']:
+            if values['FiveChar']:
+                window['-PLAINTEXT_DECRYPT-'].update(af.wrapFiveCharacters(af.decryption('', values['-KEY_DECRYPT_M-'], values['-KEY_DECRYPT_B-'], True, values['-PATH_SOURCE_DECRYPT-'])))
+            else:
+                window['-PLAINTEXT_DECRYPT-'].update(af.decryption('', values['-KEY_DECRYPT_M-'], values['-KEY_DECRYPT_B-'], True, values['-PATH_SOURCE_DECRYPT-']))
+        if values['Hill']:
             message = e.readTextFromFile(values['-PATH_SOURCE_DECRYPT-'])
             key = values['-KEY_DECRYPT-']
             resultMessage = h.generateHillResultMessage(message, key, encrypt = False)
-            if values['FiveChar'] == True:
+            if values['FiveChar']:
                 window['-PLAINTEXT_DECRYPT-'].update(h.wrapFiveCharacters(resultMessage))
             else:
                 window['-PLAINTEXT_DECRYPT-'].update(resultMessage)
-        if values['Enigma'] == True:
+        if values['Enigma']:
             text = e.readTextFromFile(values['-PATH_SOURCE_DECRYPT-'])
             alphabetList, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor = enigmaEncryptDecryptInit()
-            if values['FiveChar'] == True:
+            if values['FiveChar']:
                 window['-PLAINTEXT_DECRYPT-'].update(e.wrapFiveCharacters(e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList)))
             else:
                 window['-PLAINTEXT_DECRYPT-'].update(e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList))
 
     elif event == 'Decrypt File, Output File':
         print("hello")
-        if values['ExtendedVignere'] == True:
+        if values['ExtendedVigenere']:
             print("hello")
             listOfBytes = []
             with open(values['-PATH_SOURCE_DECRYPT-'], "rb") as f:
@@ -341,83 +432,113 @@ while True:
             h.close()
 
     elif event=='Decrypt from Text File, Output into Text File':
-        if values['vignere'] == True:
-            pass
-        if values['FullVignere'] == True:
-            pass
-        if values['RunningKeyVignere'] == True:
-            pass
-        if values['ExtendedVignere'] == True:
+        if values['Vigenere']:
+            if values['FiveChar']:
+                window['-PLAINTEXT_DECRYPT-'].update(vg.write_to_file(values['-PATH_DECRYPT-'], vg.wrapFiveCharacters(vg.decryption('', values['-KEY_DECRYPT-'], True, values['-PATH_SOURCE_DECRYPT-']))))
+            else:
+                window['-PLAINTEXT_DECRYPT-'].update(vg.write_to_file(values['-PATH_DECRYPT-'], vg.decryption('', values['-KEY_DECRYPT-'], True, values['-PATH_SOURCE_DECRYPT-'])))
+        if values['FullVigenere']:
+            if values['FiveChar']:
+                window['-PLAINTEXT_DECRYPT-'].update(fvg.write_to_file(values['-PATH_DECRYPT-'], fvg.wrapFiveCharacters(fvg.decryption('', values['-KEY_DECRYPT-'], True, values['-PATH_SOURCE_DECRYPT-']))))
+            else:
+                window['-PLAINTEXT_DECRYPT-'].update(fvg.write_to_file(values['-PATH_DECRYPT-'], fvg.decryption('', values['-KEY_DECRYPT-'], True, values['-PATH_SOURCE_DECRYPT-'])))
+        if values['RunningKeyVigenere']:
+            if values['FiveChar']:
+                window['-PLAINTEXT_DECRYPT-'].update(avg.write_to_file(values['-PATH_DECRYPT-'], avg.wrapFiveCharacters(avg.decryption('', values['-KEY_DECRYPT-'], True, values['-PATH_SOURCE_DECRYPT-']))))
+            else:
+                window['-PLAINTEXT_DECRYPT-'].update(avg.write_to_file(values['-PATH_DECRYPT-'], avg.decryption('', values['-KEY_DECRYPT-'], True, values['-PATH_SOURCE_DECRYPT-'])))
+        if values['ExtendedVigenere']:
             message = e.readTextFromFile(values['-PATH_SOURCE_DECRYPT-'])
             key = values['-KEY_DECRYPT-']
-            if values['FiveChar'] == True:
+            if values['FiveChar']:
                 window['-PLAINTEXT_DECRYPT-'].update(vge.write_to_file(values['-PATH_DECRYPT-'], vge.wrapFiveCharacters(vge.decryptTextExtendedVigenere(message, key))))
             else:
                 window['-PLAINTEXT_DECRYPT-'].update(vge.write_to_file(values['-PATH_DECRYPT-'], vge.decryptTextExtendedVigenere(message, key)))  
-        if values['Playfair'] == True:
+        if values['Playfair']:
             message = e.readTextFromFile(values['-PATH_SOURCE_DECRYPT-'])
             key = values['-KEY_DECRYPT-']
-            if values['FiveChar'] == True:
+            if values['FiveChar']:
                 window['-PLAINTEXT_DECRYPT-'].update(p.write_to_file(values['-PATH_DECRYPT-'], p.wrapFiveCharacters(p.toUpperCase(p.playfairDecrypt(message, key)))))
             else:
                 window['-PLAINTEXT_DECRYPT-'].update(p.write_to_file(values['-PATH_DECRYPT-'], p.toUpperCase(p.playfairDecrypt(message, key))))
-        if values['SuperEncryption'] == True:
-            pass
-        if values['Affine'] == True:
-            pass
-        if values['Hill'] == True:
+        if values['SuperEncryption']:
+            if values['FiveChar']:
+                window['-PLAINTEXT_DECRYPT-'].update(se.write_to_file(values['-PATH_DECRYPT-'], se.wrapFiveCharacters(se.myszkowskiTranspositionDecrypt(vg.decryption('', values['-KEY_DECRYPT-'], True, values['-PATH_SOURCE_DECRYPT-']), values['-KEY_DECRYPT-']))))
+            else:
+                window['-PLAINTEXT_DECRYPT-'].update(se.write_to_file(values['-PATH_DECRYPT-'], se.myszkowskiTranspositionDecrypt(vg.decryption('', values['-KEY_DECRYPT-'], True, values['-PATH_SOURCE_DECRYPT-']), values['-KEY_DECRYPT-'])))
+        if values['Affine']:
+            if values['FiveChar']:
+                window['-PLAINTEXT_DECRYPT-'].update(af.write_to_file(values['-PATH_DECRYPT-'], af.wrapFiveCharacters(af.decryption('', values['-KEY_DECRYPT_M-'], values['-KEY_DECRYPT_B-'], True, values['-PATH_SOURCE_DECRYPT-']))))
+            else:
+                window['-PLAINTEXT_DECRYPT-'].update(af.write_to_file(values['-PATH_DECRYPT-'], af.decryption('', values['-KEY_DECRYPT_M-'], values['-KEY_DECRYPT_B-'], True, values['-PATH_SOURCE_DECRYPT-'])))
+        if values['Hill']:
             message = e.readTextFromFile(values['-PATH_SOURCE_DECRYPT-'])
             key = values['-KEY_DECRYPT-']
             resultMessage = h.generateHillResultMessage(message, key, encrypt = False)
-            if values['FiveChar'] == True:
+            if values['FiveChar']:
                 window['-PLAINTEXT_DECRYPT-'].update(h.write_to_file(values['-PATH_DECRYPT-'], h.wrapFiveCharacters(resultMessage)))
             else:
                 window['-PLAINTEXT_DECRYPT-'].update(h.write_to_file(values['-PATH_DECRYPT-'], resultMessage))
-        if values['Enigma'] == True:
+        if values['Enigma']:
             text = e.readTextFromFile(values['-PATH_SOURCE_DECRYPT-'])
             alphabetList, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor = enigmaEncryptDecryptInit()
-            if values['FiveChar'] == True:
+            if values['FiveChar']:
                 window['-PLAINTEXT_DECRYPT-'].update(e.write_to_file(values['-PATH_DECRYPT-'], e.wrapFiveCharacters(e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList))))
             else:
                 window['-PLAINTEXT_DECRYPT-'].update(e.write_to_file(values['-PATH_DECRYPT-'], e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList)))
 
     elif event=='Decrypt Output into Text File':
-        if values['vignere'] == True:
-            pass
-        if values['FullVignere'] == True:
-            pass
-        if values['RunningKeyVignere'] == True:
-            pass
-        if values['ExtendedVignere'] == True:
+        if values['Vigenere']:
+            if values['FiveChar']:
+                window['-PLAINTEXT_DECRYPT-'].update(vg.write_to_file(values['-PATH_DECRYPT-'], vg.wrapFiveCharacters(vg.decryption(values['-CIPHERTEXT_DECRYPT-'], values['-KEY_DECRYPT-']))))
+            else:
+                window['-PLAINTEXT_DECRYPT-'].update(vg.write_to_file(values['-PATH_DECRYPT-'], vg.decryption(values['-CIPHERTEXT_DECRYPT-'], values['-KEY_DECRYPT-'])))
+        if values['FullVigenere']:
+            if values['FiveChar']:
+                window['-PLAINTEXT_DECRYPT-'].update(fvg.write_to_file(values['-PATH_DECRYPT-'], fvg.wrapFiveCharacters(fvg.decryption(values['-CIPHERTEXT_DECRYPT-'], values['-KEY_DECRYPT-']))))
+            else:
+                window['-PLAINTEXT_DECRYPT-'].update(fvg.write_to_file(values['-PATH_DECRYPT-'], fvg.decryption(values['-CIPHERTEXT_DECRYPT-'], values['-KEY_DECRYPT-'])))
+        if values['RunningKeyVigenere']:
+            if values['FiveChar']:
+                window['-PLAINTEXT_DECRYPT-'].update(avg.write_to_file(values['-PATH_DECRYPT-'], avg.wrapFiveCharacters(avg.decryption(values['-CIPHERTEXT_DECRYPT-'], values['-KEY_DECRYPT-']))))
+            else:
+                window['-PLAINTEXT_DECRYPT-'].update(avg.write_to_file(values['-PATH_DECRYPT-'], avg.decryption(values['-CIPHERTEXT_DECRYPT-'], values['-KEY_DECRYPT-'])))
+        if values['ExtendedVigenere']:
             message = values['-CIPHERTEXT_DECRYPT-']
             key = values['-KEY_DECRYPT-']
-            if values['FiveChar'] == True:
+            if values['FiveChar']:
                 window['-PLAINTEXT_DECRYPT-'].update(vge.write_to_file(values['-PATH_DECRYPT-'], vge.wrapFiveCharacters(vge.decryptTextExtendedVigenere(message, key))))
             else:
                 window['-PLAINTEXT_DECRYPT-'].update(vge.write_to_file(values['-PATH_DECRYPT-'], vge.decryptTextExtendedVigenere(message, key)))
-        if values['Playfair'] == True:
+        if values['Playfair']:
             message = values['-CIPHERTEXT_DECRYPT-']
             key = values['-KEY_DECRYPT-']
-            if values['FiveChar'] == True:
+            if values['FiveChar']:
                 window['-PLAINTEXT_DECRYPT-'].update(p.write_to_file(values['-PATH_DECRYPT-'], p.wrapFiveCharacters(p.toUpperCase(p.playfairDecrypt(message, key)))))
             else:
                 window['-PLAINTEXT_DECRYPT-'].update(p.write_to_file(values['-PATH_DECRYPT-'], p.toUpperCase(p.playfairDecrypt(message, key))))
-        if values['SuperEncryption'] == True:
-            pass
-        if values['Affine'] == True:
-            window['-PLAINTEXT_DECRYPT-'].update(af.decryption(values['-CIPHERTEXT_DECRYPT-'], values['-KEY_DECRYPT_M-'], values['-KEY_DECRYPT_B-']))
-        if values['Hill'] == True:
+        if values['SuperEncryption']:
+            if values['FiveChar']:
+                window['-PLAINTEXT_DECRYPT-'].update(vg.write_to_file(values['-PATH_DECRYPT-'], vg.wrapFiveCharacters(vg.decryption(se.myszkowskiTranspositionDecrypt(values['-CIPHERTEXT_DECRYPT-'], values['-KEY_DECRYPT-']), values['-KEY_DECRYPT-']))))
+            else:
+                window['-PLAINTEXT_DECRYPT-'].update(vg.write_to_file(values['-PATH_DECRYPT-'], vg.decryption(se.myszkowskiTranspositionDecrypt(values['-CIPHERTEXT_DECRYPT-'], values['-KEY_DECRYPT-']), values['-KEY_DECRYPT-'])))
+        if values['Affine']:
+            if values['FiveChar']:
+                window['-PLAINTEXT_DECRYPT-'].update(af.write_to_file(values['-PATH_DECRYPT-'], af.wrapFiveCharacters(af.decryption(values['-CIPHERTEXT_DECRYPT-'], values['-KEY_DECRYPT_M-'], values['-KEY_DECRYPT_B-'], False, ''))))
+            else:
+                window['-PLAINTEXT_DECRYPT-'].update(af.write_to_file(values['-PATH_DECRYPT-'], af.decryption(values['-CIPHERTEXT_DECRYPT-'], values['-KEY_DECRYPT_M-'], values['-KEY_DECRYPT_B-'], False, '')))
+        if values['Hill']:
             message = values['-CIPHERTEXT_DECRYPT-']
             key = values['-KEY_DECRYPT-']
             resultMessage = h.generateHillResultMessage(message, key, encrypt = False)
-            if values['FiveChar'] == True:
+            if values['FiveChar']:
                 window['-PLAINTEXT_DECRYPT-'].update(h.write_to_file(values['-PATH_DECRYPT-'], h.wrapFiveCharacters(resultMessage)))
             else:
                 window['-PLAINTEXT_DECRYPT-'].update(h.write_to_file(values['-PATH_DECRYPT-'], resultMessage))
-        if values['Enigma'] == True:
+        if values['Enigma']:
             text = values['-CIPHERTEXT_DECRYPT-']
             alphabetList, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor = enigmaEncryptDecryptInit()
-            if values['FiveChar'] == True:
+            if values['FiveChar']:
                 window['-PLAINTEXT_DECRYPT-'].update(e.write_to_file(values['-PATH_DECRYPT-'], e.wrapFiveCharacters(e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList))))
             else:
                 window['-PLAINTEXT_DECRYPT-'].update(e.write_to_file(values['-PATH_DECRYPT-'], e.encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList)))

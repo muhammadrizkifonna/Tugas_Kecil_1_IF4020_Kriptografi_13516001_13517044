@@ -1,8 +1,13 @@
+from textwrap import wrap
+
 def write_to_file(path, ciphertext):
     file1 = open(path,"w") 
     file1.write(ciphertext) 
     file1.close()
 
+def wrapFiveCharacters(message):
+    messageWrapFive = wrap(message,5)
+    return ' '.join(messageWrapFive)
 
 def encryption(plaintext, key, from_file, path, write_to_file):
     #Input plaintext
@@ -73,8 +78,8 @@ def encryption(plaintext, key, from_file, path, write_to_file):
              'w', 'x', 'y', 'z']
     ciphertext=''
     for i in range(len(plaintext)):
-        if (i%5==0) and (i!=0):
-            ciphertext+='-'
+        # if (i%5==0) and (i!=0):
+        #     ciphertext+='-'
         ciphernumber=(alphabet.index(plaintext[i])+alphabet.index(key[i]))%26
         #print(ciphernumber, end=', ')
         ciphertext+=alphabet[ciphernumber]
@@ -82,8 +87,14 @@ def encryption(plaintext, key, from_file, path, write_to_file):
     return ciphertext
 
 
-def decryption(ciphertext, key):
-    #Input plaintext
+def decryption(ciphertext, key, from_file = False, path = ''):
+    #Input ciphertext
+    if (from_file):
+        file1 = open(path,"r") 
+        ciphertext_list = file1.readlines()
+        seperator=''
+        file1.close()
+        ciphertext=seperator.join(ciphertext_list)
 
     #ciphertext = input("Masukkan ciphertext:")
 

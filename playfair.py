@@ -95,7 +95,7 @@ def readTextFromFile(path):
     return data
 
 def main():
-    # orig = "Hide the gold in... the TREESTUMP!!!"
+    # orig = "Hi.de th.e go.ld in th.e tr.ee.stu.mp!"
     key = "Playfair example"
     # encrypted = toUpperCase(playfairEncrypt(orig, key))
     # print(encrypted)
