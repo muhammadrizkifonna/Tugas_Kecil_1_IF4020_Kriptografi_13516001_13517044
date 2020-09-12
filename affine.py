@@ -13,19 +13,12 @@ def toUpperCase(text):
     return "".join(filter(str.isupper, text.upper()))
 
 def extendedGCDEuclideanAlgorithm(a, b):
-    x,y, u,v = 0,1, 1,0
-    while a != 0: 
-        q, r = b//a, b%a 
-        m, n = x-u*q, y-v*q 
-        b,a, x,y, u,v = a,r, u,v, m,n 
-    gcd = b 
-    return gcd, x, y 
-    # if a == 0 :   
-    #     return b, 0, 1
-    # greatestCommonDenominator, x1, y1 = extendedGCDEuclideanAlgorithm(b%a, a)
-    # x = y1 - (b//a) * x1  
-    # y = x1
-    # return greatestCommonDenominator, x, y
+    if a == 0 :   
+        return b, 0, 1
+    greatestCommonDenominator, x1, y1 = extendedGCDEuclideanAlgorithm(b%a, a)
+    x = y1 - (b//a) * x1  
+    y = x1
+    return greatestCommonDenominator, x, y
 
 def getModularInverse(a, m):
     gcd, x, y = extendedGCDEuclideanAlgorithm(a, m) 
