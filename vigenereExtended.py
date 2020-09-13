@@ -1,3 +1,4 @@
+#vigenere Extended
 from textwrap import wrap
 
 def generateKey(string, key): 
@@ -71,22 +72,3 @@ def readTextFromFile(path):
     data = file1.read()
     file1.close()
     return data
-
-if __name__ == "__main__": 
-    listOfBytes = []
-    with open("videoplayback.mp4", "rb") as f:
-        while (byte := f.read(1)):
-            listOfBytes.append(byte)
-    f.close()
-    keyword = "VigenereExample"
-    key = generateKey(listOfBytes, keyword) 
-    cipherText = encryptByteExtendedVigenere(listOfBytes, key)
-    g = open("VigenereExtendedEncrypted.mp4", "wb+")
-    for index in range(len(cipherText)):
-        g.write(cipherText[index])
-    g.close()
-    decryptedText = decryptByteExtendedVigenere(cipherText, key)
-    h = open("VigenereExtendedDecrypted.mp4", "wb+")
-    for index in range(len(decryptedText)):
-        h.write(decryptedText[index])
-    h.close()

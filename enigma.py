@@ -1,3 +1,5 @@
+#enigma
+
 from textwrap import wrap
 
 def permutate(rotor, alphabetList):
@@ -78,32 +80,3 @@ def wrapFiveCharacters(message):
 
 def toUpperCase(text):
     return "".join(filter(str.isupper, text.upper()))
-
-def main():
-    alphabet= "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    alphabetList = list(alphabet)
-
-    #text = input("Input text: ")
-    text = "there is no time"
-    # text = 'iwzqz jx kl kxvz'
-    #text = 'i'
-    # steckerbrettDictionary = {' ': ' '}
-    steckerbrettDictionary = { ' ':' ',"B":'A', 'E':'Z'}
-    # pairsInSteckerBrett = input("Input the number of pairs in steckerbrett: ")
-    # for i in range(int(pairsInSteckerBrett)):
-    #     print("Pair #" + str(i+1))
-    #     firstSteckerbrettAlphabet = input("Input the first alphabet in pair: ")
-    #     secondSteckerbrettAlphabet = input("Input the second alphabet in pair: ")
-    #     steckerbrettDictionary[firstSteckerbrettAlphabet.upper()] = secondSteckerbrettAlphabet.upper()
-    # print("Input alpha, beta and gamma rotors")
-    # alphaRotor = int(input("Alpha Rotor = "))
-    # betaRotor = int(input("Beta Rotor = "))
-    # gammaRotor = int(input("Gamma Rotor = "))
-    alphaRotor = 3
-    betaRotor = 17
-    gammaRotor = 24
-
-    print(encryptDecrypt(text, steckerbrettDictionary, alphaRotor, betaRotor, gammaRotor, alphabetList))
-
-if __name__ == "__main__": 
-    main() 

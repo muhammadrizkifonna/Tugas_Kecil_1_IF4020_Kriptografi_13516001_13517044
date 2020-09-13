@@ -174,10 +174,3 @@ def decryption(ciphertext, key, from_file = False, path = ''):
         #print(ciphertext)
     return plaintext
 
-
-"""
-#Outputs the ciphertext#
-print("Ciphertext:"+encryption())
-"""
-#Outputs the plaintext#
-#print("Ciphertext:"+decryption())

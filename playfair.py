@@ -1,3 +1,4 @@
+#playfair
 from textwrap import wrap
 
 def generateUniqueAlphabetList(seq):
@@ -11,7 +12,6 @@ def toUpperCase(text):
     return "".join(filter(str.isupper, text.upper()))
 
 def splitMessageToDigraphs(message):
-	#Change it to Array. Because I want used insert() method
 	messageList=[]
 	for e in message:
 		messageList.append(e)
@@ -93,17 +93,3 @@ def readTextFromFile(path):
     data = file1.read()
     file1.close()
     return data
-
-def main():
-    # orig = "Hi.de th.e go.ld in th.e tr.ee.stu.mp!"
-    key = "Playfair example"
-    # encrypted = toUpperCase(playfairEncrypt(orig, key))
-    # print(encrypted)
-    #printWrapFiveCharacters(encrypted)
-    enc = "BMODZBXDNABEKUDMUIXMMOUVIF"
-    decrypted = toUpperCase(playfairDecrypt(enc, key))
-    print(decrypted)
-    #printWrapFiveCharacters(decrypted)
-
-if __name__ == "__main__":
-    main()

@@ -1,4 +1,4 @@
-#using vigenere + Myszkowski transposition cipher
+#SuperEncryption using vigenere.py + Myszkowski transposition cipher (this file)
 
 #myszkowski
 import math 
@@ -59,7 +59,7 @@ def myszkowskiTranspositionEncrypt(message, key):
     return encryptedMessage 
   
 def myszkowskiTranspositionDecrypt(message, key): 
-    message = toUpperCase(message)
+    message = message.upper()
     key = toUpperCase(key)
     decryptedMessage = "" 
     keyIndex = 0
@@ -69,28 +69,30 @@ def myszkowskiTranspositionDecrypt(message, key):
     column = len(key) 
     row = int(math.ceil(messageLength / column)) 
     keyList = generateKeyList(key)
+    print("Keylist = ", keyList)
     key = ''.join(keyList)
     sortedKeyList = sorted(keyList)
-    decrytedMessageList = [] 
+    print("Sorted Keylist = ", sortedKeyList)
+    decryptedMessageList = [] 
     for _ in range(row): 
-        decrytedMessageList += [[None] * column] 
+        decryptedMessageList += [[''] * column] 
+    print(range(column))
     for _ in range(column): 
         curr_idx = key.index(sortedKeyList[keyIndex]) 
+        print("messageListLength = ", len(messageList))
+        print(range(row))
         for j in range(row): 
-            decrytedMessageList[j][curr_idx] = messageList[messageIndex] 
+            print("j = ", j)
+            print("curr_idx = ", curr_idx)
+            print("messageIndex = ", messageIndex)
+            decryptedMessageList[j][curr_idx] = messageList[messageIndex] 
             messageIndex += 1
         keyIndex += 1
-    decryptedMessage = ''.join(sum(decrytedMessageList, [])) 
+    print("decryptedMessageList = \n", decryptedMessageList)
+    decryptedMessage = ''.join(sum(decryptedMessageList, [])) 
     additionalTemp = decryptedMessage.count('*') 
     if additionalTemp > 0: 
         return decryptedMessage[: -additionalTemp] 
     return decryptedMessage 
-  
-#Driver Code 
-# msg = "Mantap Jiwa"
-# key = "AcakAcak"
-  
-# cipher = myszkowskiTranspositionEncrypt(msg, key) 
-# print("Encrypted Message: {}". format(cipher)) 
-  
-# print("Decryped Message: {}". format(myszkowskiTranspositionDecrypt(cipher, key)))
+# print(myszkowskiTranspositionEncrypt("GeeksForGeeks","HACK"))
+# print(myszkowskiTranspositionDecrypt(myszkowskiTranspositionEncrypt("GeeksForGeeks","HACK"), "HACK"))

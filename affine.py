@@ -1,3 +1,5 @@
+#affine
+
 from textwrap import wrap
 
 def write_to_file(path, ciphertext):
@@ -28,12 +30,6 @@ def getModularInverse(a, m):
         return x % m
 
 def encryption(plaintext, key_m, key_b, from_file, path, write_to_file):
-    #Input plaintext
-
-    #plaintext = input("Masukkan plaintext:")
-
-    #Input key from user#
-    #key = input("Masukkan key:")
     if (from_file):
         file1 = open(path,"r") 
         plaintext_list = file1.readlines()
@@ -41,9 +37,7 @@ def encryption(plaintext, key_m, key_b, from_file, path, write_to_file):
         file1.close()
         plaintext=seperator.join(plaintext_list)
 
-    #Convert into lowercase#
     plaintext=toUpperCase(plaintext)
-    #key=key.lower()
 
     #Remove comma
     plaintext = plaintext.replace(',', '')
@@ -65,35 +59,6 @@ def encryption(plaintext, key_m, key_b, from_file, path, write_to_file):
             no_punct = no_punct + char
     plaintext=no_punct
 
-    # Remove punctuation from key
-    """
-    no_punct = ""
-    for char in key:
-        if char not in punctuations:
-            no_punct = no_punct + char
-    """
-    #key=no_punct
-
-    """
-    #Compare plaintext and key's length#
-    if (len(key)<len(plaintext)):
-        real_key=key
-        times = len(plaintext)//len(key)
-
-        for i in range(times-1):
-            key+=real_key
-
-        sisa = len(plaintext)-len(key)
-
-        for i in range(sisa):
-            key+=real_key[i]
-
-    #If key>plaintext#
-    elif (len(key)>len(plaintext)):
-        key=key[:len(plaintext)]
-
-    print(key)
-    """
     #Alphabet list for conversion from number to character#
     alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     alphabet = list(alphabet)
@@ -118,18 +83,7 @@ def decryption(ciphertext, key_m, key_b, from_file = False, path = '', write_to_
         file1.close()
         ciphertext=seperator.join(ciphertext_list)
 
-    #ciphertext = input("Masukkan ciphertext:")
-
-    #print(ciphertext[0])
-
-    #Input key from user#
-    #key = input("Masukkan key:")
-
-    #print(key)
-
-    #Convert into lowercase#
     ciphertext=toUpperCase(ciphertext)
-    #key=key.lower()
 
     #Remove comma
     ciphertext = ciphertext.replace(',', '')
@@ -149,73 +103,21 @@ def decryption(ciphertext, key_m, key_b, from_file = False, path = '', write_to_
         if char not in punctuations:
             no_punct = no_punct + char
     ciphertext=no_punct
-
-    # Remove punctuation from key
-    """
-    no_punct = ""
-    for char in key:
-        if char not in punctuations:
-            no_punct = no_punct + char
-    key=no_punct
-    """
-
-    """
-    #Compare plaintext and key's length#
-    if (len(key)<len(ciphertext)):
-        real_key=key
-        times = len(ciphertext)//len(key)
-        print(len(ciphertext))
-
-        for i in range(times-1):
-            key+=real_key
-
-        sisa = len(ciphertext)-len(key)
-
-        for i in range(sisa):
-            key+=real_key[i]
     
-
-    #If key>plaintext#
-    elif (len(key)>len(ciphertext)):
-        key=key[:len(ciphertext)]
-
-    print(key)
-    """
     #Alphabet list for conversion from number to character#
     alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     alphabet = list(alphabet)
     key_m=int(key_m)
     key_b=int(key_b)
     #Find the inverse of key_m
-    # plaintextList = []
-    # for i in range(len(ciphertext)):
-    #     modularInverse = getModularInverse(key_m, 26)
-    #     shift = ord(ciphertext[i])-ord('A')-key_b
-    #     char = chr(((modularInverse*shift)%26)+ord('A'))
-    #     plaintextList.append(char)
-    # plaintext = ''.join(plaintextList)
 
-    # for i in range(0,1000):
-    #     if (((key_m*i)%26)==1):
-    #         break
-    
     key_m_inverse = getModularInverse(key_m, 26)
 
     plaintext=''
     for i in range(len(ciphertext)):
-        #alphabet_cycle=itertools.cycle(alphabet)
-        #print(key[i])
-        #plainnumber=(alphabet.index(ciphertext[i])-alphabet.index(key[i]))%26
         plainnumber=(key_m_inverse*(alphabet.index(ciphertext[i])-key_b))%26
 
         plaintext+=alphabet[plainnumber]
         print(ciphertext)
     return plaintext
 
-
-"""
-#Outputs the ciphertext#
-print("Ciphertext:"+encryption())
-"""
-#Outputs the plaintext#
-#print("Ciphertext:"+decryption())

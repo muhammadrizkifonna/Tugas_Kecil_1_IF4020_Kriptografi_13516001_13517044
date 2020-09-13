@@ -12,7 +12,7 @@ import myszkowskiTransposition as se
 layout = [[sg.Text('Cipher method')],
             [sg.Radio('vigenere', "cipherMethod", default=True, size=(10,1), key='Vigenere'), 
                 sg.Radio('FullVigenere', "cipherMethod", key='FullVigenere'), 
-                sg.Radio('RunningKeyVigenere', "cipherMethod", key='RunningKeyVigenere'), 
+                sg.Radio('AutoKeyVigenere', "cipherMethod", key='RunningKeyVigenere'), 
                 sg.Radio('ExtendedVigenere', "cipherMethod", key='ExtendedVigenere'), 
                 sg.Radio('Playfair', "cipherMethod", key='Playfair'),
                 sg.Radio('SuperEncryption', "cipherMethod", key='SuperEncryption'),

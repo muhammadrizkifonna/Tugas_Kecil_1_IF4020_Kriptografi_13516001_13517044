@@ -1,5 +1,4 @@
 # Hill Cipher
-# By Ignatius Timothy Manullang 13517044
 
 from textwrap import wrap
 
@@ -162,48 +161,3 @@ def generateHillResultMessage(message, key, encrypt):
             decipherText = HillCipherDecryption(messagePart, key)
             resultList.append(decipherText)
     return ''.join(resultList)
-
-def main(): 
-    #3x3 Hill Cipher
-    message = "AC.T"
-    message = toUpperCase(message)
-    message = wrap(message, 3)
-    key = "GYBNQKURP"
-
-    #Compare plaintext and key's length#
-    if (len(key)<9):
-        real_key=key
-        times = 9//len(key)
-
-        for i in range(times-1):
-            key+=real_key
-
-        sisa = 9-len(key)
-
-        for i in range(sisa):
-            key+=real_key[i]
-
-    #If key>plaintext#
-    elif (len(key)>9):
-        key=key[:9]
-
-    for messagePart in message:
-        add = 0
-        if len(messagePart) < 3:
-            add = 3 - len(messagePart) 
-            for i in range(add):
-                messagePart = ''.join([messagePart, 'X']) 
-        print(messagePart)
-        cipherText = HillCipherEncryption(messagePart, key)
-        print(cipherText)
-        decipherText = HillCipherDecryption(cipherText, key)
-        print(decipherText)
-        if add > 0:
-            for i in range(add):
-                messagePart = messagePart[:-1]
-        print("Ciphertext: ", cipherText) 
-        print("Deciphertext: ", decipherText)
-
-if __name__ == "__main__": 
-    main() 
-  

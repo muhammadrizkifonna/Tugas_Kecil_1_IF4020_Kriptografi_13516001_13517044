@@ -3,15 +3,11 @@ Vigenere
 plaintext : lorem ipsum dolor
 key : sit
 ciphertext : dwkwu-bhane-lhdwk
-2. 
-plaintext : thisplaintext
-key : sony
-ciphertext : lvvqh-zngfh-rvl
 
 Full vigenere
 plaintext : Lorem ipsum dolor
 key : sit
-ciphertext : dwkwubhanelhdwk
+ciphertext : PMVEYZFBLJKYPMV
 
 Auto key vigenere
 plaintext : Lorem ipsum dolor
@@ -19,7 +15,7 @@ key : sit
 ciphertext : dwkpa-ztecb-vixrf
 
 extendedVigenere
-Plaintext: hello. hello
+Plaintext: hellohello
 Key: hello
 Ciphertext: oiww}oiww}
 
@@ -29,9 +25,9 @@ key = "playfair example"
 Ciphertext: BMODZBXDNABEKUDMUIXMMOUVIF
 
 SuperEncryption
-Plaintext: hello. hello
+Plaintext: hello hello
 Key: ac~tac~t
-Ciphertext: HALEGEQOEN-*
+Ciphertext: HELOGNQ*EEA*
 
 Affine
 plaintext : kripto
@@ -53,7 +49,10 @@ Second alphabet: A
 Pair #1
 First alphabet: E
 Second alphabet: Z
-Ciphertext: IWZQZ JX KL KXVZ
+Alpha Rotor: 3
+Beta Rotor: 17
+Gamma Rotor: 24
+Ciphertext: IWZQZ HV GH DRPZ
 
 
 
